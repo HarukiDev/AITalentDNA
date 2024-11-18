@@ -1,18 +1,16 @@
 import React from "react";
+import CulturalCompatibilityIcon from "../assets/businessicon.svg";
+import AskAdindaImage from "../assets/imageCard1.svg";
+import CompleteTalentProfilesIcon from "../assets/Peopleicon.svg";
+import AcceleratedHiringIcon from "../assets/Timeicon.svg";
 
-// Import images from the assets folder
-import CulturalCompatibilityIcon from "../assets/businessicon.png";
-import AskAdindaImage from "../assets/Group.png";
-import CompleteTalentProfilesIcon from "../assets/Peopleicon.png";
-import AcceleratedHiringIcon from "../assets/Timeicon.png";
-
-const Section1 = () => {
+export default function WhyUs() {
   return (
-    <div className="bg-base-100 p-16 relative">
+    <div id="whyUs" className="px-[20%] h-full">
       {/* Circular Frame for "Why Us" */}
-      <div className="flex justify-center items-center mb-2">
+      <div className="flex items-center justify-center mb-2">
         <div
-          className="border border-gray-400 text-gray-600 font-medium rounded-full px-4 py-1 text-sm"
+          className="px-4 py-1 text-sm font-medium text-gray-600 border border-gray-400 rounded-full"
           style={{
             display: "inline-block",
           }}
@@ -22,7 +20,7 @@ const Section1 = () => {
       </div>
 
       <h2
-        className="text-4xl font text-center mt-4 mb-8 bg-clip-text text-transparent"
+        className="mt-4 mb-8 text-4xl text-center text-transparent font bg-clip-text"
         style={{
           background: "linear-gradient(90deg, #0B3983 37.72%, #167AEA 63.25%)",
           WebkitBackgroundClip: "text",
@@ -33,34 +31,35 @@ const Section1 = () => {
       </h2>
 
       {/* Chatbot Section */}
-      <div className="flex flex-col lg:flex-row items-center bg-white shadow-md rounded-xl p-6 gap-6">
+      <div className="flex flex-col items-center gap-6 p-6 bg-white shadow-md lg:flex-row rounded-xl">
         <div className="flex-1">
-          <h2 className="text-title-6 font-bold text-black">Guided Assistance with Adinda</h2>
-          <p className="text-base-6 mt-2 text-gray-600">
+          <h2 className="font-bold text-black text-title-6">Guided Assistance with Adinda</h2>
+          <p className="mt-2 text-gray-600 text-base-6">
             Meet Adinda, our dedicated chatbot, here to answer all your Talent DNA questions and guide you through the hiring process.
           </p>
         </div>
-        <div className="flex-[1.7]"> {/* Enlarges the image */}
+        <div className="flex-[1.7]">
+          {/* Enlarges the image */}
           <img
             src={AskAdindaImage}
             alt="Ask Adinda"
-            className="rounded-xl w-full h-auto object-cover"
+            className="object-cover w-full h-auto rounded-xl"
           />
         </div>
       </div>
 
       {/* Features Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10">
+      <div className="grid grid-cols-1 gap-6 mt-10 lg:grid-cols-3">
         {/* Feature 1 */}
         <div className="bg-white shadow-md rounded-xl p-6 w-full max-w-[700px] mx-auto lg:max-w-[550px] flex flex-col items-center">
-          <h3 className="text-title-6 font-bold text-black text-center">Cultural Compatibility</h3>
-          <p className="text-base-6 mt-2 text-gray-600 text-center">
+          <h3 className="font-bold text-center text-black text-title-6">Cultural Compatibility</h3>
+          <p className="mt-2 text-center text-gray-600 text-base-6">
             Build teams that genuinely fit your company's core values and vision.
           </p>
           <img
             src={CulturalCompatibilityIcon}
             alt="Cultural Compatibility Icon"
-            className="w-full h-18 object-cover"
+            className="object-cover w-full h-18"
           />
         </div>
 
@@ -69,12 +68,12 @@ const Section1 = () => {
           <img
             src={AcceleratedHiringIcon}
             alt="Accelerated Hiring Icon"
-            className="h-13 w-13 mb-5"
+            className="mb-5 h-13 w-13"
           />
-          <h3 className="text-title-6 font-bold text-black text-center">
+          <h3 className="font-bold text-center text-black text-title-6">
             Accelerated Hiring Process
           </h3>
-          <p className="text-base-6 mt-2 text-gray-600 text-center">
+          <p className="mt-2 text-center text-gray-600 text-base-6">
             Focus on the top 5-10 best-fit candidates, making hiring faster and smarter.
           </p>
         </div>
@@ -84,18 +83,16 @@ const Section1 = () => {
           <img
             src={CompleteTalentProfilesIcon}
             alt="Complete Talent Profiles Icon"
-            className="h-13 w-13 mb-5"
+            className="mb-5 h-13 w-13"
           />
-          <h3 className="text-title-6 font-bold text-black text-center">
+          <h3 className="font-bold text-center text-black text-title-6">
             Complete Talent Profiles
           </h3>
-          <p className="text-base-6 mt-2 text-gray-600 text-center">
-            Access detailed insights on job fit, culture alignment, career advice, and growth pathhs.
+          <p className="mt-2 text-center text-gray-600 text-base-6">
+            Access detailed insights on job fit, culture alignment, career advice, and growth paths.
           </p>
         </div>
       </div>
     </div>
   );
-};
-
-export default Section1;
+}

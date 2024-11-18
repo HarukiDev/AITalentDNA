@@ -1,8 +1,8 @@
 import React from 'react'
 import { useMediaQuery } from "@uidotdev/usehooks";
-import Logo from "../assets/logo.svg"
+import Logo from "../assets/logo.svg";
 
-export default function navbar() {
+export default function Navbar({ activeSection }) {
   const isLargeScreen = useMediaQuery("(max-width: 768px)");
 
   return (
@@ -15,12 +15,33 @@ export default function navbar() {
         <header className="fixed flex top-0 right-0 left-0 items-center z-50 mt-10 rounded-[30px] px-4 lg:py-1 xl:py-[5px] justify-around">
           <div className='flex items-center gap-7'>
             <div className="w-[150px]">
-              <img className="w-full h-full bg-cover" src={Logo} alt="" />
+              <img className="w-full h-full bg-cover" src={Logo} alt="Logo" />
             </div>
             <div className="flex gap-6 text-lg">
-              <a href="#getStarted">Home</a>
-              <a href="#whyUs">WhyUs</a>
-              <a href="#qnA">QnA</a>
+              <a
+                href="#getStarted"
+                className={`${
+                  activeSection === "get-started-section" ? "text-blue-700" : ""
+                }`}
+              >
+                Home
+              </a>
+              <a
+                href="#whyUs"
+                className={`${
+                  activeSection === "why-us-section" ? "text-blue-700" : ""
+                }`}
+              >
+                Why Us
+              </a>
+              <a
+                href="#qnA"
+                className={`${
+                  activeSection === "qna-section" ? "text-blue-700" : ""
+                }`}
+              >
+                QnA
+              </a>
             </div>
           </div>
           <div className="flex gap-5 text-lg leading-tight text-center">

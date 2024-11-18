@@ -6,7 +6,7 @@ export default function QnA() {
   const isLargeScreen = useMediaQuery("(max-width: 768px)");
   
   return (
-    <section id="qnA" className="py-10 qna-section">
+    <div id="qnA" className="px-[20%] h-screen flex justify-center items-center">
       <div className="container px-4 mx-auto">
       <div className="flex items-center justify-between mb-10">
         <div className="w-1/2">
@@ -36,11 +36,8 @@ export default function QnA() {
                 </div>
               </div>
           </div>
-
-
-          
         )}
       </div>
-    </section>
+    </div>
   );
 }
