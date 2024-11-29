@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import daisyui from "daisyui";
-import plugin from "tailwindcss/plugin"; // Import plugin dari tailwindcss
+import plugin from "tailwindcss/plugin";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -19,9 +19,18 @@ export default {
     },
   },
   plugins: [
-    daisyui, // Gunakan daisyui langsung tanpa require
+    daisyui,
+    // Plugin Custom
     plugin(function ({ addUtilities }) {
       addUtilities({
+        '.scrollbar-hide': {
+          /* Untuk menyembunyikan scrollbar di semua browser */
+          '-ms-overflow-style': 'none', // IE and Edge
+          'scrollbar-width': 'none', // Firefox
+          '&::-webkit-scrollbar': {
+            display: 'none', // Chrome, Safari, and Opera
+          },
+        },
         '.complex-gradient': {
           background: `
             linear-gradient(to bottom right, rgba(113, 133, 225, 0.20) 0%, rgba(234, 244, 255, 0.20) 50%) bottom right / 50% 50% no-repeat,
@@ -32,9 +41,9 @@ export default {
           `,
           filter: 'drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.25))',
           'backdrop-filter': 'blur(50px)',
-        }
+        },
       });
-    })
+    }),
   ],
   daisyui: {
     themes: [

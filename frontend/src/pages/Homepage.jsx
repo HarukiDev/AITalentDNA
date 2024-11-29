@@ -5,6 +5,7 @@ import GetStartedSection from "../pageSection/getStarted.jsx";
 import WhyUs from "../pageSection/whyUs.jsx";
 import Qna from "../pageSection/qna.jsx";
 import { useInView } from "react-intersection-observer";
+import Testimonial from "../pageSection/testimonial.jsx";
 
 export default function Homepage() {
   const [activeSection, setActiveSection] = useState("");
@@ -36,6 +37,15 @@ export default function Homepage() {
     },
   });
 
+  const { ref: testimonialRef, inView: testimonialInView } = useInView({
+    threshold: 0.5,
+    onChange: (inView) => {
+      if (inView) {
+        setActiveSection("testimonial-section");
+      }
+    },
+  });
+
   return (
     <div>
       <Navbar activeSection={activeSection} />
@@ -47,6 +57,9 @@ export default function Homepage() {
       </div>
       <div ref={qnaRef}>
         <Qna />
+      </div>
+      <div ref={testimonialRef}>
+        <Testimonial />
       </div>
       <Footer />
     </div>

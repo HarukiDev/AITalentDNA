@@ -9,7 +9,7 @@ export default function chatCard() {
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      transition={{ duration: 0.9, ease: "easeInOut" }}
       className="flex flex-col w-full h-full p-6 bg-gray-200 shadow-lg border-1 rounded-2xl bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10"
     >
         {/* Bubble Chat Adinda */}
@@ -54,9 +54,9 @@ export default function chatCard() {
             placeholder="Write a message"
             className="flex-grow text-gray-700 outline-none"
           />
-          <button className="ml-2">
+          <motion.button whileTap={{ scale: 0.85 }} className="ml-2">
             <img src={SendIcon} alt="send"/>
-          </button>
+          </motion.button>
         </div>
     </motion.div>
   );
