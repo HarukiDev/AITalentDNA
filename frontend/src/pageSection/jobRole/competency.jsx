@@ -83,80 +83,79 @@ export default function CompetencyPage({
   return (
     <div className="p-0 bg-transparent min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Competencies</h1>
-          <p className="text-gray-600">
-            Define competencies based on the roles and skills you need
-          </p>
-        </div>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5">
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Competencies</h1>
+        <p className="text-gray-600 text-sm sm:text-base">
+          Define competencies based on the roles and skills you need
+        </p>
+      </div>
 
-        {/* Search Bar and Option Button */}
-        <div className="flex items-center">
-          <div className="relative flex items-center">
-            <input
-              type="text"
-              placeholder="Search Competencies"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-64 p-2 pl-10 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-            />
-            <span className="absolute left-3 text-gray-400">
+      {/* Search Bar and Option Button */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mt-4 sm:mt-0">
+        <div className="relative w-full sm:w-auto">
+          <input
+            type="text"
+            placeholder="Search Competencies"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full sm:w-64 p-2 pl-10 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+          />
+          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12.9 14.32a8 8 0 111.42-1.42l3.75 3.74a1 1 0 11-1.41 1.42l-3.75-3.74zM8 14a6 6 0 100-12 6 6 0 000 12z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </span>
+        </div>
+        <div className="relative w-full sm:w-auto" ref={actionMenuRef}>
+          <button
+            className="flex justify-center items-center bg-blue-600 text-white py-2 px-4 w-full sm:w-auto rounded-lg"
+            onClick={toggleActionMenu}
+          >
+            {actionMenuVisible ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="white"
+                className="w-5 h-5"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M12.9 14.32a8 8 0 111.42-1.42l3.75 3.74a1 1 0 11-1.41 1.42l-3.75-3.74zM8 14a6 6 0 100-12 6 6 0 000 12z"
-                  clipRule="evenodd"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </span>
-          </div>
-          <div className="relative" ref={actionMenuRef}>
-          <button
-  className="ml-4 bg-blue-600 text-white py-2 px-4 rounded-lg flex items-center"
-  onClick={toggleActionMenu}
->
-  {actionMenuVisible ? (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="2"
-      stroke="white"
-      className="w-5 h-5"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M6 18L18 6M6 6l12 12"
-      />
-    </svg>
-  ) : (
-    <>
-      Option
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-4 h-4 ml-2"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M19 9l-7 7-7-7"
-        />
-      </svg>
-    </>
-  )}
-</button>
-
+            ) : (
+              <>
+                <span>Option</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 ml-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </>
+            )}
+          </button>
 
             {actionMenuVisible && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg">
@@ -271,51 +270,60 @@ export default function CompetencyPage({
     </table>
   </div>
 
-      {/* Pagination */}
-      <div className="flex justify-between items-center p-4">
-          <div>
-            <label htmlFor="itemsPerPage" className="mr-2">
-              Items per page:
-            </label>
-            <select
-              id="itemsPerPage"
-              value={itemsPerPage}
-              onChange={handleItemsPerPageChange}
-              className="p-2 border rounded"
-            >
-              <option value="3">3</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-            </select>
-          </div>
-          <div className="flex items-center">
-            <button
-              className={`${
-                currentPage === 1
-                  ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                  : 'bg-blue-500 text-white hover:bg-blue-600'
-              } px-4 py-2 rounded transition duration-300`}
-              disabled={currentPage === 1}
-              onClick={handlePreviousPage}
-            >
-              Previous
-            </button>
-            <span className="px-4">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              className={`${
-                currentPage === totalPages
-                  ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                  : 'bg-blue-500 text-white hover:bg-blue-600'
-              } px-4 py-2 rounded transition duration-300`}
-              disabled={currentPage === totalPages}
-              onClick={handleNextPage}
-            >
-              Next
-            </button>
-          </div>
-        </div>
+ {/* Pagination */}
+<div className="flex flex-col sm:flex-row justify-between items-center p-4 gap-4 sm:gap-0">
+  {/* Items Per Page Selector */}
+  <div className="flex items-center">
+    <label htmlFor="itemsPerPage" className="mr-2 text-sm sm:text-base">
+      Items per page:
+    </label>
+    <select
+      id="itemsPerPage"
+      value={itemsPerPage}
+      onChange={handleItemsPerPageChange}
+      className="p-2 border rounded text-sm sm:text-base"
+    >
+      <option value="3">3</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+    </select>
+  </div>
+
+  {/* Pagination Controls */}
+  <div className="flex items-center justify-center gap-2">
+    {/* Previous Button */}
+    <button
+      className={`${
+        currentPage === 1
+          ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+          : 'bg-blue-500 text-white hover:bg-blue-600'
+      } px-3 sm:px-4 py-2 text-sm sm:text-base rounded transition duration-300`}
+      disabled={currentPage === 1}
+      onClick={handlePreviousPage}
+    >
+      Previous
+    </button>
+
+    {/* Current Page Info */}
+    <span className="text-sm sm:text-base">
+      Page {currentPage} of {totalPages}
+    </span>
+
+    {/* Next Button */}
+    <button
+      className={`${
+        currentPage === totalPages
+          ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+          : 'bg-blue-500 text-white hover:bg-blue-600'
+      } px-3 sm:px-4 py-2 text-sm sm:text-base rounded transition duration-300`}
+      disabled={currentPage === totalPages}
+      onClick={handleNextPage}
+    >
+      Next
+    </button>
+  </div>
+</div>
+
     </div>
     </div>
   );
