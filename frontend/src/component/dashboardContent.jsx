@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import React from "react";
 import AdindaImage from "../assets/imageProfil/Adinda.svg";
 import BgTextureCard1 from "../assets/bg-textureCard1.svg";
@@ -8,7 +9,16 @@ import BgtextureP from "../assets/bgtextureP.svg";
 import { motion } from "framer-motion";
 import SendIcon from "../assets/sendIcon.svg";
 
+
+
 export default function DashboardContent() {
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/Jobfit');
+  };
+  
   return (
     <div className="px-[12%] h-full py-32">
       <div className="flex flex-col gap-4 xl:flex-row">
@@ -131,7 +141,8 @@ export default function DashboardContent() {
             </p>
             <div className="w-full my-2 border-t-2 border-gray-300"></div>
             <div className="flex justify-center w-full gap-2">
-              <button className="px-2 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 w-[50%] h-[40px] flex justify-center items-center">
+              <button onClick={handleClick} className="px-2 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 w-[50%] h-[40px] flex justify-center items-center" >
+                
                 Job Fit
               </button>
               <button className="px-2 py-3 text-sm font-medium text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 w-[50%] h-[40px] flex justify-center items-center">
