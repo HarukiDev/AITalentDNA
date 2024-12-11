@@ -105,7 +105,7 @@ const CategoryComponent = () => {
           <div className="relative w-80">
             <input
               type="text"
-              placeholder="Search Employee"
+              placeholder="Search Candidate"
               className="w-full p-3 pl-10 transition-colors border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={searchTerm}
               onChange={handleSearch}
@@ -291,7 +291,7 @@ const CategoryComponent = () => {
                 >
                   Save
                 </button>
-                
+
               </div>
             </div>
           </div>

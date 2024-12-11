@@ -130,13 +130,13 @@ const Candidate = () => {
       candidate.topTalent,
       candidate.bottomTalent,
     ]);
-  
+
     // Convert headers and rows into a CSV string
     const csvContent = [
       headers.join(','), // Add header row
       ...rows.map(row => row.join(',')), // Add data rows
     ].join('\n');
-  
+
     // Create a Blob from the CSV string and trigger download
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -147,7 +147,7 @@ const Candidate = () => {
     link.click();
     document.body.removeChild(link);
   };
-  
+
 
   return (
     <div id="candidate">
@@ -160,7 +160,7 @@ const Candidate = () => {
           <div className="relative w-80">
             <input
               type="text"
-              placeholder="Search Employee"
+              placeholder="Search Candidate"
               className="w-full p-3 pl-10 transition-colors border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               onChange={handleSearch}
             />
@@ -400,25 +400,41 @@ const Candidate = () => {
 
       {/* Delete Candidate Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h3 className="text-xl font-semibold mb-4">Are you sure you want to delete this candidate?</h3>
-            <div className="flex justify-end space-x-2">
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 bg-gray-300 rounded-lg"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDeleteCandidate}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg"
-              >
-                Delete
-              </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
+          <div className="relative w-full max-w-md p-6 bg-white rounded-lg shadow-2xl">
+            {/* Close Button */}
+
+
+            {/* Modal Content */}
+            <div className="flex flex-col items-center justify-center text-center">
+              {/* Trash Icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" className="text-red-500 w-14 h-14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-2-2m0 0l-2-2m2 2H9m10 0l-1 12a2 2 0 01-2 2H6a2 2 0 01-2-2L3 7M7 7h10M10 11v6M14 11v6" />
+              </svg>
+
+              <h3 className="mb-4 text-xl font-semibold text-gray-800">Delete Candidate</h3>
+              <p className="mb-6 text-gray-600">
+                Are you sure you want to delete the Candidate <strong></strong>?
+              </p>
+
+              <div className="flex justify-center space-x-4">
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="px-6 py-2 text-white bg-gray-400 rounded-full hover:bg-gray-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteCandidate}
+                  className="px-6 py-2 text-white bg-red-600 rounded-full hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         </div>
+
       )}
 
       <div className="max-w-full overflow-x-auto">

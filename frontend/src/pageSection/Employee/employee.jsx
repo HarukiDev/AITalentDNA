@@ -20,8 +20,8 @@ const Employee = () => {
   // State to handle modal visibility for Import CSV
   const [showImportModal, setShowImportModal] = useState(false);
 
-   // Handle CSV file input change
-   const handleCsvFileChange = (e) => {
+  // Handle CSV file input change
+  const handleCsvFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type === 'text/csv') {
       setCsvFile(file);
@@ -48,33 +48,33 @@ const Employee = () => {
     reader.readAsText(csvFile);
   };
 
-    // Dummy download function
-    const downloadCSV = () => {
-      const headers = ['Employee', 'Email', 'Category', 'Top 10 Talent Value', 'Bottom 5 Talent Value'];
-      const rows = filteredemployees.map(employee => [
-        employee.name,
-        employee.email,
-        employee.category,
-        employee.topTalent,
-        employee.bottomTalent,
-      ]);
-  
-      // Convert headers and rows into a CSV string
-      const csvContent = [
-        headers.join(','), // Add header row
-        ...rows.map(row => row.join(',')), // Add data rows
-      ].join('\n');
-  
-      // Create a Blob from the CSV string and trigger download
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'employees.csv'; // The name of the downloaded file
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    };
+  // Dummy download function
+  const downloadCSV = () => {
+    const headers = ['Employee', 'Email', 'Category', 'Top 10 Talent Value', 'Bottom 5 Talent Value'];
+    const rows = filteredemployees.map(employee => [
+      employee.name,
+      employee.email,
+      employee.category,
+      employee.topTalent,
+      employee.bottomTalent,
+    ]);
+
+    // Convert headers and rows into a CSV string
+    const csvContent = [
+      headers.join(','), // Add header row
+      ...rows.map(row => row.join(',')), // Add data rows
+    ].join('\n');
+
+    // Create a Blob from the CSV string and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'employees.csv'; // The name of the downloaded file
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // Function to open edit modal and prefill data
   const openEditModal = (employee) => {
@@ -115,60 +115,32 @@ const Employee = () => {
     closeDeleteModal(); // Tutup modal setelah menghapus
   };
 
-   // Handle search (just a placeholder, you can implement filtering later)
-   const handleSearch = (event) => {
+  // Handle search (just a placeholder, you can implement filtering later)
+  const handleSearch = (event) => {
     // Implement your search functionality here
     console.log(event.target.value);
   };
 
 
-
-   // Toggle dropdown visibility
-   const [actionMenuVisible, setActionMenuVisible] = useState(false);
-   const toggleDropdown = () => setActionMenuVisible(!actionMenuVisible);
+  const [employees, setEmployees] = useState([]); // Data semua karyawan
 
 
-   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-  const [newEmployeeData, setNewEmployeeData] = useState({
-    name: "",
-    nik: "",
-    email: "",
-    category: "",
-    topTalent: "",
-    bottomTalent: "",
-  });
- 
-   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditEmployeeData({ ...editEmployeeData, [name]: value });
+
+  // Toggle dropdown visibility
+  const [actionMenuVisible, setActionMenuVisible] = useState(false);
+  const toggleDropdown = () => setActionMenuVisible(!actionMenuVisible);
+
+
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+
+  const handleAddEmployee = (newEmployee) => {
+    setEmployees((prevEmployees) => [...prevEmployees, newEmployee]);
+    setFilteredEmployees((prevEmployees) => [...prevEmployees, newEmployee]); // Jika filter ada
+    setIsAddModalVisible(false); // Tutup modal
   };
 
-  const openAddModal = () => {
-    setIsAddModalVisible(true);
-  };
 
-  const closeAddModal = () => {
-    setNewEmployeeData({
-      name: "",
-      nik: "",
-      email: "",
-      category: "",
-      topTalent: "",
-      bottomTalent: "",
-    });
-    setIsAddModalVisible(false);
-  };
 
-  const handleAddEmployee = (e) => {
-    e.preventDefault();
-    setFilteredEmployees((prevEmployees) => [...prevEmployees, newEmployeeData]);
-    closeAddModal();
-  };
-
-  const handleNewInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewEmployeeData({ ...newEmployeeData, [name]: value });
-  };
 
 
   return (
@@ -228,8 +200,8 @@ const Employee = () => {
             </button>
             {actionMenuVisible && (
               <div className="absolute right-0 z-10 w-48 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-                
-                <div className="px-4 py-2 transition-colors cursor-pointer hover:bg-gray-100" onClick={() => setShowAddModal(true)}>
+
+                <div className="px-4 py-2 transition-colors cursor-pointer hover:bg-gray-100" onClick={() => setIsAddModalVisible(true)}>
                   Add Employee
                 </div>
                 <div className="px-4 py-2 transition-colors cursor-pointer hover:bg-gray-100" onClick={() => setShowImportModal(true)}>
@@ -246,87 +218,114 @@ const Employee = () => {
 
       {/* Add Employee Modal */}
       {isAddModalVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-            <h2 className="text-xl font-semibold mb-4">Add Employee</h2>
-            <form onSubmit={handleAddEmployee}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={newEmployeeData.name}
-                  onChange={handleNewInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-xl w-3/4 max-w-4xl">
+            <h3 className="text-2xl font-semibold mb-6 text-center text-green-600">Add Employee</h3>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const newEmployee = {
+                  name: e.target.name.value,
+                  nik: e.target.nik.value,
+                  email: e.target.email.value,
+                  category: e.target.category.value,
+                  topTalent: e.target.topTalent.value,
+                  bottomTalent: e.target.bottomTalent.value,
+                };
+                handleAddEmployee(newEmployee); // Add new employee data
+              }}
+            >
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    placeholder="Enter employee name"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="nik" className="block text-sm font-medium text-gray-700">NIK</label>
+                  <input
+                    type="text"
+                    id="nik"
+                    name="nik"
+                    className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    placeholder="Enter employee NIK"
+                    required
+                  />
+                </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">NIK</label>
-                <input
-                  type="text"
-                  name="nik"
-                  value={newEmployeeData.nik}
-                  onChange={handleNewInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    placeholder="Enter employee email"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+                  <select
+                    id="category"
+                    name="category"
+                    className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
+                  >
+                    <option value="">Select category</option>
+                    <option value="Developer">Developer</option>
+                    <option value="Designer">Designer</option>
+                  </select>
+                </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={newEmployeeData.email}
-                  onChange={handleNewInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label htmlFor="topTalent" className="block text-sm font-medium text-gray-700">Top 10 Talent Value</label>
+                  <select
+                    id="topTalent"
+                    name="topTalent"
+                    className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
+                  >
+                    <option value="">Select top talent</option>
+                    <option value="Category 1">Category 1</option>
+                    <option value="Category 2">Category 2</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="bottomTalent" className="block text-sm font-medium text-gray-700">Bottom 5 Talent Value</label>
+                  <select
+                    id="bottomTalent"
+                    name="bottomTalent"
+                    className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
+                  >
+                    <option value="">Select bottom talent</option>
+                    <option value="Category 1">Category 1</option>
+                    <option value="Category 2">Category 2</option>
+                  </select>
+                </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Category</label>
-                <input
-                  type="text"
-                  name="category"
-                  value={newEmployeeData.category}
-                  onChange={handleNewInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Top 10 Talent Value</label>
-                <input
-                  type="text"
-                  name="topTalent"
-                  value={newEmployeeData.topTalent}
-                  onChange={handleNewInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Bottom 5 Talent Value</label>
-                <input
-                  type="text"
-                  name="bottomTalent"
-                  value={newEmployeeData.bottomTalent}
-                  onChange={handleNewInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-              <div className="flex justify-end space-x-2">
+              <div className="flex justify-between items-center mt-8">
                 <button
                   type="button"
-                  className="px-4 py-2 bg-gray-300 rounded-lg"
-                  onClick={closeAddModal}
+                  onClick={() => setIsAddModalVisible(false)}
+                  className="px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition duration-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+                  className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200"
                 >
-                  Add
+                  Add Employee
                 </button>
               </div>
             </form>
@@ -367,32 +366,41 @@ const Employee = () => {
 
       {/* Modal Hapus */}
       {isDeleteModalVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-1/3">
-            <h3 className="text-lg font-bold text-center mb-4">
-              Are you sure you want to delete this employee?
-            </h3>
-            <p className="text-center text-gray-700 mb-6">
-              {selectedEmployee?.name} ({selectedEmployee?.email})
-            </p>
-            <div className="flex justify-between">
-              <button
-                className="px-6 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300"
-                onClick={closeDeleteModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-6 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
-                onClick={handleDeleteEmployee}
-              >
-                Yes, Delete
-              </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
+          <div className="relative w-full max-w-md p-6 bg-white rounded-lg shadow-2xl">
+            {/* Close Button */}
+
+
+            {/* Modal Content */}
+            <div className="flex flex-col items-center justify-center text-center">
+              {/* Trash Icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" className="text-red-500 w-14 h-14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-2-2m0 0l-2-2m2 2H9m10 0l-1 12a2 2 0 01-2 2H6a2 2 0 01-2-2L3 7M7 7h10M10 11v6M14 11v6" />
+              </svg>
+
+              <h3 className="mb-4 text-xl font-semibold text-gray-800">Delete Employee</h3>
+              <p className="mb-6 text-gray-600">
+                Are you sure you want to delete the Employee <strong>{selectedEmployee?.name} ({selectedEmployee?.email})</strong>?
+              </p>
+
+              <div className="flex justify-center space-x-4">
+                <button
+                  onClick={closeDeleteModal}
+                  className="px-6 py-2 text-white bg-gray-400 rounded-full hover:bg-gray-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteEmployee}
+                  className="px-6 py-2 text-white bg-red-600 rounded-full hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
-
       {/* Edit Employee Modal */}
       {isModalVisible && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
@@ -539,7 +547,7 @@ const Employee = () => {
                   <td className="py-3 px-6">{employee.bottomTalent}</td>
                   <td className="py-3 px-6 flex justify-around space-x-2">
 
-                  <button
+                    <button
                       className="text-blue-500 hover:text-blue-700 focus:outline-none"
                       onClick={() => openEditModal(employee)}
                     >
@@ -555,7 +563,6 @@ const Employee = () => {
                         <path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"></path>
                       </svg>
                     </button>
-                    {/* Add a delete function here */}
                   </td>
                 </tr>
               ))

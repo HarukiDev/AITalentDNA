@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import Homepage from "./pages/Homepage.jsx";
-import EmployeeTes from "./pages/employeetes.jsx";
 import Candidate from "./pages/candidate.jsx";
 import Category from "./pages/category.jsx";
 import Dashboard from "./pages/dashboard.jsx";
@@ -19,7 +18,6 @@ function App() {
     <Routes>
       <Route path="/" element={<Homepage />} />
       <Route path="/Dashboard" element={<Dashboard />} />
-      <Route path="/Employeetes" element={<EmployeeTes />} />
       <Route path="/Candidate" element={<Candidate />} />
       <Route path="/Category" element={<Category />} />
       <Route path="/Corevalue" element={<CoreValue />} />
