@@ -1,20 +1,14 @@
 import { Route, Routes } from "react-router-dom";
 import Homepage from "./pages/Homepage.jsx";
-import Candidate from "./pages/candidate.jsx";
-import Category from "./pages/category.jsx";
+import Employee from "./pages/EmployeePage.jsx";
 import Dashboard from "./pages/dashboard.jsx";
 import CoreValue from "./pages/coreValuePage.jsx";
-
-import Employee from "./pages/EmployeePage.jsx";
-
-import JobFit from "./pages/jobfitPage.jsx";
-
 import LoginPage from "./pages/Loginpage.jsx"
-
-// import Findpage from "./pages/findpage.jsx";
-import DetailProfile from "./pages/detailProfile.jsx";
+import Jobfit from "./pages/jobfitPage.jsx";
+import DetailProfile from './pages/detailProfile';
 import UserProfile from "./pages/userProfile.jsx";
 import FindPage from "./pages/findpage.jsx";
+import JobRolePage from "./pages/jobRolePage.jsx";
 
 function App() {
   return (
@@ -24,15 +18,10 @@ function App() {
       <Route path="/DetailProfil" element={<DetailProfile/>} />
       <Route path="/UserProfile" element={<UserProfile/>} />
       <Route path="/Employee" element={<Employee />} />
+      <Route path="/JobRole" element={<JobRolePage />} />
       <Route path="/Corevalue" element={<CoreValue />} />
-      
-      <Route path="/Employee" element={<Employee />} />
-      
-      <Route path="/Jobfit" element={<JobFit />} />
-
       <Route path="/Loginpage" element={<LoginPage />} />
-      <Route path="/job-fit" element={<Jobfit />} />
-      <Route path="/culture-fit" element={<Culturefit />} />
+      <Route path="/jobfit" element={<Jobfit />} />
       <Route path="/MatchingByPerson" element={<FindPage />} />
     </Routes>
   );

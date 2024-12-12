@@ -1,33 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import FindByNamePage from "../pageSection/findpage/searchsection";
 import FindByTalentDNAPage from "../pageSection/findpage/TalentDNASection";
 import NavbarDashboard from "../pageSection/navBarDashboard";
 
 const FindPage = () => {
   const [activeSection, setActiveSection] = useState("findByName");
-  const [showScrollTop, setShowScrollTop] = useState(false); // State untuk tombol scroll to top
-  const navigate = useNavigate();
 
-  // Pantau posisi scroll untuk menampilkan/menyembunyikan tombol scroll to top
+  // Set section aktif berdasarkan query parameter
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
+    const queryParams = new URLSearchParams(window.location.search);
+    const section = queryParams.get("section");
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    if (section === "findByTalentDNA" || section === "findByName") {
+      setActiveSection(section);
+    }
   }, []);
 
-  // Fungsi untuk menggulir halaman ke atas
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const handleSectionChange = (section) => {
+    // Update URL tanpa reload halaman
+    window.history.pushState({}, "", `?section=${section}`);
+    setActiveSection(section);
   };
 
   const renderSection = () => {
@@ -43,104 +35,57 @@ const FindPage = () => {
 
   return (
     <div>
-      <NavbarDashboard />
-
-      <div className="px-[12%] h-full py-32">
-        <button
-          onClick={() => navigate("/dashboard")}
-          style={styles.backButton}
+      {/* Kontainer Konten */}
+      <div className="px-[12%] h-full py-32 relative">
+        {/* Tombol Kembali */}
+        <a
+          href="/dashboard"
+          className="absolute flex items-center text-gray-700 top-10 left-10 hover:text-blue-700"
         >
-          ←
-        </button>
+          <img
+            src="https://img.icons8.com/?size=100&id=40217&format=png&color=1D4ED8"
+            alt="Back"
+            className="w-6 h-6 mr-2"
+          />
+          Back
+        </a>
 
-        <div style={styles.container}>
-          <div style={styles.navbar}>
+        {/* Navigasi Tab */}
+        <div className="flex flex-col items-center justify-between mb-4 border-b md:flex-row">
+          <div className="flex justify-around w-full mb-4 md:w-auto md:justify-start md:mb-0">
             <button
-              onClick={() => setActiveSection("findByName")}
-              style={{
-                ...styles.navButton,
-                ...(activeSection === "findByName" ? styles.activeButton : {}),
-              }}
+              onClick={() => handleSectionChange("findByName")}
+              className={`py-2 px-4 rounded ${
+                activeSection === "findByName"
+                  ? "text-blue-500 border-b-2 border-blue-500" 
+                  : "text-gray-700"
+              }`}
             >
               Find By Name
             </button>
             <button
-              onClick={() => setActiveSection("findByTalentDNA")}
-              style={{
-                ...styles.navButton,
-                ...(activeSection === "findByTalentDNA"
-                  ? styles.activeButton
-                  : {}),
-              }}
+              onClick={() => handleSectionChange("findByTalentDNA")}
+              className={`py-2 px-4 rounded ${
+                activeSection === "findByTalentDNA"
+                  ? "text-blue-500 border-b-2 border-blue-500" 
+                  : "text-gray-700"
+              }`}
             >
               Find By TalentDNA
             </button>
           </div>
-
-          <div>{renderSection()}</div>
+          {/* Conditional rendering for text */}
+          <div className="py-2 text-sm text-center text-gray-500 transition-all duration-300 ease-in-out md:text-right ">
+              {activeSection === 'findByName' ? 'Matching by Fit/find By Name' : 'Matching by Fit/find By Talent DNA'}
+          </div>
         </div>
+        
 
-        {/* Tombol Scroll to Top */}
-        {showScrollTop && (
-          <button onClick={scrollToTop} style={styles.scrollTopButton}>
-            ⬆️
-          </button>
-        )}
+        {/* Konten Berdasarkan Tab Aktif */}
+        <div className="p-4 bg-white rounded-lg shadow">{renderSection()}</div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    padding: "2rem",
-    borderRadius: "8px",
-    margin: "2rem auto",
-    maxWidth: "800px",
-  },
-  navbar: {
-    display: "flex",
-    justifyContent: "center",
-    marginBottom: "1rem",
-  },
-  navButton: {
-    padding: "10px 20px",
-    border: "1px solid #ccc",
-    cursor: "pointer",
-    backgroundColor: "#f9f9f9",
-    marginRight: "0.5rem",
-    borderRadius: "5px",
-    fontWeight: "bold",
-  },
-  activeButton: {
-    backgroundColor: "#007bff",
-    color: "#fff",
-  },
-  backButton: {
-    marginBottom: "1rem",
-    padding: "10px 15px",
-    backgroundColor: "#f1f1f1",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontSize: "16px",
-    fontWeight: "bold",
-    display: "inline-block",
-  },
-  scrollTopButton: {
-    position: "fixed",
-    bottom: "20px",
-    right: "20px",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "50%",
-    padding: "10px 15px",
-    fontSize: "20px",
-    cursor: "pointer",
-    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-    zIndex: 1000,
-  },
 };
 
 export default FindPage;

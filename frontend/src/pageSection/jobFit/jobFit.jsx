@@ -6,7 +6,7 @@ const competencies = [
     content: (
       <div>
         Memberikan perawatan yang mencakup aspek fisik, emosional, dan sosial pasien.
-        <ol className="list-decimal ml-6 mt-2">
+        <ol className="mt-2 ml-6 list-decimal">
           <li>Menilai kebutuhan pasien secara menyeluruh untuk merencanakan intervensi yang sesuai.</li>
           <li>Memastikan asuhan keperawatan mencakup dukungan emosional.</li>
           <li>Mengintegrasikan dukungan keluarga dan komunitas dalam perawatan pasien.</li>
@@ -19,7 +19,7 @@ const competencies = [
     content: (
       <div>
         Memberikan perawatan yang mencakup aspek fisik, emosional, dan sosial pasien.
-        <ol className="list-decimal ml-6 mt-2">
+        <ol className="mt-2 ml-6 list-decimal">
           <li>Menilai kebutuhan pasien secara menyeluruh untuk merencanakan intervensi yang sesuai.</li>
         </ol>
       </div>
@@ -30,7 +30,7 @@ const competencies = [
     content: (
       <div>
         Memberikan perawatan yang mencakup aspek fisik, emosional, dan sosial pasien.
-        <ol className="list-decimal ml-6 mt-2">
+        <ol className="mt-2 ml-6 list-decimal">
           <li>Menilai kebutuhan pasien secara menyeluruh untuk merencanakan intervensi yang sesuai.</li>
         </ol>
       </div>
@@ -149,13 +149,13 @@ export default function Jobfit() {
       </div>
 
       {/* Mandatory Competencies Card */}
-      <div className="card bg-white shadow-md rounded-lg p-6 mb-6">
-        <h1 className="text-2xl font-bold mb-4 text-center">Mandatory Competencies</h1>
+      <div className="p-6 mb-6 bg-white rounded-lg shadow-md card">
+        <h1 className="mb-4 text-2xl font-bold text-center">Mandatory Competencies</h1>
         {selectedOption ? (
           competencies.map((competency, index) => (
-            <div key={index} className="competency mb-4">
+            <div key={index} className="mb-4 competency">
               <div
-                className="title bg-blue-500 text-white p-3 rounded cursor-pointer flex justify-between items-center hover:bg-blue-700"
+                className="flex items-center justify-between p-3 text-white bg-blue-500 rounded cursor-pointer title hover:bg-blue-700"
                 onClick={() => handleToggle(index)}
               >
                 <span>{competency.title}</span>
@@ -184,24 +184,24 @@ export default function Jobfit() {
                 </span>
               </div>
               {activeIndex === index && (
-                <div className="content bg-gray-100 p-4 rounded mt-2">
+                <div className="p-4 mt-2 bg-gray-100 rounded content">
                   {competency.content}
                 </div>
               )}
             </div>
           ))
         ) : (
-          <p className="text-gray-500 text-center">Please select a position to view the competencies.</p>
+          <p className="text-center text-gray-500">Please select a position to view the competencies.</p>
         )}
       </div>
 
       {/* Additional Competencies Card */}
       {selectedOption && (
-        <div className="card bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-2xl font-bold mb-2 text-center">Additional Competencies</h2>
-          <p className="mb-4 text-left w-full">Categorize employees by their division or business unit for efficient talent management.</p>
-          <div className="flex justify-center mb-4 w-full">
-            <select className="border p-2 rounded w-full">
+        <div className="p-6 bg-white rounded-lg shadow-md card">
+          <h2 className="mb-2 text-2xl font-bold text-center">Additional Competencies</h2>
+          <p className="w-full mb-4 text-left">Categorize employees by their division or business unit for efficient talent management.</p>
+          <div className="flex justify-center w-full mb-4">
+            <select className="w-full p-2 border rounded">
               <option value="" disabled selected>
                 Select Category (optional)
               </option>
@@ -213,7 +213,7 @@ export default function Jobfit() {
           <div className="flex justify-center">
             <button
               onClick={handleSubmit}
-              className="bg-blue-500 text-white p-2 w-full max-w-xs md:max-w-sm hover:bg-blue-700"
+              className="w-full max-w-xs p-2 text-white bg-blue-500 md:max-w-sm hover:bg-blue-700"
               style={{
                 background: 'linear-gradient(90deg, #1678E6 0%, #0C3C87 100%)',
                 borderRadius: '7px',
@@ -229,11 +229,11 @@ export default function Jobfit() {
 {showProfiles && (
   <div className="flex flex-col items-center mt-6">
     {/* Talent Analysis Card */}
-    <div className="card bg-white shadow-md rounded-lg p-6 mb-6 w-full">
-      <h2 className="text-2xl font-bold mb-5 text-center">Talent Analysis</h2>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+    <div className="w-full p-6 mb-6 bg-white rounded-lg shadow-md card">
+      <h2 className="mb-5 text-2xl font-bold text-center">Talent Analysis</h2>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
         {Array.from({ length: 20 }, (_, i) => (
-          <button key={i} className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">
+          <button key={i} className="p-2 text-white bg-blue-500 rounded hover:bg-blue-700">
             AFFECTIONATE
           </button>
         ))}
@@ -241,35 +241,35 @@ export default function Jobfit() {
     </div>
 
     {/* Profile and Progress Bar Section */}
-    <div className="flex flex-col md:flex-row w-full space-x-4">
+    <div className="flex flex-col w-full space-x-4 md:flex-row">
       {/* Profile Card */}
-      <div className="w-full md:w-1/3 flex flex-col items-center">
+      <div className="flex flex-col items-center w-full md:w-1/3">
         {profiles.map((profile, index) => (
           <div
             key={index}
             className={`flex-shrink-0 w-full flex flex-col items-center bg-white shadow-md rounded-lg p-4 mb-4 ${index === activeIndex ? 'block' : 'hidden'}`}
           >
-            <div className="w-24 h-24 bg-gray-400 rounded-full mb-4">
+            <div className="w-24 h-24 mb-4 bg-gray-400 rounded-full">
               <img
                 src={profile.imageUrl}
                 alt={profile.name}
-                className="w-full h-full rounded-full object-cover"
+                className="object-cover w-full h-full rounded-full"
               />
             </div>
-            <div className="text-3xl font-bold mb-2">{profile.percentage}</div>
-            <div className="text-xl mb-4">{profile.name}</div>
+            <div className="mb-2 text-3xl font-bold">{profile.percentage}</div>
+            <div className="mb-4 text-xl">{profile.name}</div>
           </div>
         ))}
-        <div className="flex space-x-4 mt-4">
+        <div className="flex mt-4 space-x-4">
           <button
             onClick={() => setActiveIndex((prevIndex) => (prevIndex - 1 + profiles.length) % profiles.length)}
-            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition"
+            className="px-4 py-2 transition bg-gray-300 rounded-lg hover:bg-gray-400"
           >
             &lt; Prev
           </button>
           <button
             onClick={() => setActiveIndex((prevIndex) => (prevIndex + 1) % profiles.length)}
-            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition"
+            className="px-4 py-2 transition bg-gray-300 rounded-lg hover:bg-gray-400"
           >
             Next &gt;
           </button>
@@ -277,14 +277,14 @@ export default function Jobfit() {
       </div>
 
       {/* Progress Bar Card */}
-      <div className="w-full md:w-2/3 bg-white shadow-md rounded-lg p-6">
+      <div className="w-full p-6 bg-white rounded-lg shadow-md md:w-2/3">
         <div className="grid grid-cols-2 gap-4">
           {attributes.map((attribute, index) => (
             <div key={index} className="mb-4">
               <div className="mb-1">{attribute}</div>
-              <div className="w-full bg-gray-200 rounded-full h-5 relative">
+              <div className="relative w-full h-5 bg-gray-200 rounded-full">
                 <div
-                  className="bg-blue-500 h-5 rounded-full text-white text-xs flex items-center justify-center"
+                  className="flex items-center justify-center h-5 text-xs text-white bg-blue-500 rounded-full"
                   style={{
                     width: `${profiles[activeIndex].progressBars[index]}%`,
                   }}

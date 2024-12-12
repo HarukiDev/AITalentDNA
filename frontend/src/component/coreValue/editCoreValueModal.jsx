@@ -14,9 +14,9 @@ export function EditCoreValueModal({ isOpen, onClose, coreValue, updateCoreValue
       setCoreValueName(coreValue.name);  // Set core value name
       setSelectedDimension(coreValue.dimension);  // Set the selected dimension
     }
-  }, [isOpen, coreValue]);  // Only run when modal opens or coreValue changes
+  }, [isOpen, coreValue]);  
 
-  if (!isOpen) return null; // Don't render modal if it's not open
+  if (!isOpen) return null; 
 
   const handleSubmit = (e) => {
     e.preventDefault();

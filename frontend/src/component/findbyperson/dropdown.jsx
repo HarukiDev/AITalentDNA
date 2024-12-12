@@ -1,34 +1,132 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Dropdown = () => {
   const [selectedName, setSelectedName] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [user, setUser] = useState(null);
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [corporateId, setCorporateId] = useState(null);
 
-  const options = [
-    {
-      value: "John",
-      name: "John Doe",
-      division: "Marketing",
-      email: "john.doe@example.com",
-      description: "Software Engineer in Marketing Division",
-    },
-    {
-      value: "Jane",
-      name: "Jane Smith",
-      division: "Product",
-      email: "jane.smith@example.com",
-      description: "Product Manager in Product Division",
-    },
-    {
-      value: "Alex",
-      name: "Alex Johnson",
-      division: "Design",
-      email: "alex.johnson@example.com",
-      description: "UI/UX Designer in Design Division",
-    },
-  ];
+  const [categories] = useState({
+    Drive: [
+      "AVERSIVE",
+      "COLLECTOR",
+      "COMPETITIVE",
+      "CONTEMPLATIVE",
+      "DIRECTIVE",
+      "EQUITABLE",
+      "EXPLORER",
+      "GOAL-GETTER",
+      "NOBLE",
+      "OPTIMIZER",
+      "PERFECTIONIST",
+      "SELF-CONFIDENT",
+      "SIGNIFICANT",
+      "VIGOROUS",
+      "VISIONARY",
+    ],
+    Network: [
+      "ADVISOR",
+      "AFFECTIONATE",
+      "ARTICULATIVE",
+      "CARING",
+      "COLLABORATOR",
+      "CONVINCING",
+      "COURAGEOUS",
+      "DEVELOPER",
+      "ENERGIZER",
+      "FORGIVING",
+      "GENEROUS",
+      "GENUINE",
+      "HARMONY",
+      "PERSONALIZER",
+      "SOCIABLE",
+    ],
+    Action: [
+      "ACCOUNTABLE",
+      "AUTHORITATIVE",
+      "CONTEXTUAL",
+      "DECISIVE",
+      "FIXER",
+      "FLEXIBLE",
+      "FOCUSED",
+      "INITIATOR",
+      "INNOVATIVE",
+      "INTUITIVE",
+      "LOGICAL",
+      "RESOURCEFUL",
+      "STRATEGIZER",
+      "STRUCTURED",
+      "TROUBLESHOOTER",
+    ],
+  });
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      setCorporateId(parsedUser.id_corporate); // Ambil corporate_id dari local storage
+    } else {
+      window.location.href = "/LoginPage";
+    }
+  }, []);
+
+  useEffect(() => {
+    if (corporateId) {
+      fetchOptions(); // Panggil API segera setelah corporateId tersedia
+    }
+  }, [corporateId]);
+
+  const fetchOptions = async () => {
+    setLoading(true);
+
+    const allTalents = [
+      ...categories.Drive,
+      ...categories.Network,
+      ...categories.Action,
+    ];
+    
+    const requestData = {
+      talents: allTalents,
+      id_corporate: corporateId,
+      kategori: [], // Tidak menggunakan kategori
+      type: 0, // Default type
+    };
+
+    console.log("Request Data Sent:", requestData);
+    
+    try {
+      const response = await axios.post("/find/search", requestData, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.data && response.data.results) {
+        const formattedOptions = response.data.results.map((item) => ({
+          value: item.nip,
+          name: item.user,
+          email: item.email,
+          nip: item.nip,
+        }));
+        setOptions(formattedOptions);
+      } else {
+        setOptions([]);
+      }
+    } catch (error) {
+      console.error("Error fetching options:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOptions();
+  }, []);
 
   const handleChange = (selectedOption) => {
     setSelectedName(selectedOption);
@@ -41,7 +139,7 @@ const Dropdown = () => {
       setShowDetails(true);
       setErrorMessage("");
     } else {
-      setErrorMessage("Please select a name or division before searching.");
+      setErrorMessage("Please select a name or NIP before searching.");
     }
   };
 
@@ -52,162 +150,76 @@ const Dropdown = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <p style={styles.header}>
-        Search by name or division to learn more about our team.
+    <div className="max-w-md mx-auto mt-8 space-y-4">
+      <p className="text-sm italic text-center text-gray-600">
+        Search by name or NIP to learn more about our team.
       </p>
 
-      <Select
-        options={options}
-        value={selectedName}
-        onChange={handleChange}
-        placeholder="Select a name or division"
-        isSearchable={true}
-        getOptionLabel={(e) => `${e.name} - ${e.division}`}
-        getOptionValue={(e) => e.value}
-        formatOptionLabel={(e) => (
-          <div>
-            <div>
-              <strong>{e.name}</strong> - {e.division}
-            </div>
-            <div style={{ fontSize: "0.9em", color: "#6c757d" }}>{e.email}</div>
-          </div>
-        )}
-        styles={customSelectStyles}
-      />
+      {loading && <p className="text-center text-blue-500">Loading options...</p>}
 
-      <div style={styles.buttonContainer}>
+      {!loading && (
+        <Select
+          options={options}
+          value={selectedName}
+          onChange={handleChange}
+          placeholder="Select a name or NIP"
+          isSearchable
+          getOptionLabel={(e) => `${e.name} - ${e.nip}`}
+          getOptionValue={(e) => e.value}
+          formatOptionLabel={(e) => (
+            <div>
+              <div className="font-medium">
+                {e.name} - <span className="text-gray-500">{e.nip}</span>
+              </div>
+              <div className="text-xs text-gray-400">{e.email}</div>
+            </div>
+          )}
+          className="w-full border border-gray-300 rounded-lg shadow-sm"
+        />
+      )}
+
+      <div className="flex justify-between gap-4">
         <button
           onClick={handleReset}
-          style={styles.resetButton}
-          onMouseEnter={(e) => (e.target.style.boxShadow = styles.hoverResetShadow)}
-          onMouseLeave={(e) => (e.target.style.boxShadow = styles.normalShadow)}
+          className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg shadow hover:bg-red-600 focus:outline-none"
         >
           Reset
         </button>
         <button
           onClick={handleSearch}
-          style={{
-            ...styles.searchButton,
-            backgroundColor: selectedName ? "#007bff" : "#d3d3d3",
-            cursor: selectedName ? "pointer" : "not-allowed",
-          }}
+          className={`flex items-center justify-center px-4 py-2 text-white text-sm font-medium rounded-lg shadow ${
+            selectedName ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300 cursor-not-allowed"
+          }`}
           disabled={!selectedName}
-          onMouseEnter={(e) =>
-            selectedName &&
-            (e.target.style.boxShadow = styles.hoverSearchShadow)
-          }
-          onMouseLeave={(e) => (e.target.style.boxShadow = styles.normalShadow)}
         >
           Search
         </button>
       </div>
 
-      {errorMessage && <div style={styles.error}>{errorMessage}</div>}
+      {errorMessage && <div className="text-sm text-center text-red-500">{errorMessage}</div>}
 
       {showDetails && selectedName && (
-        <div style={styles.details}>
-          <h3 style={styles.detailsHeader}>{selectedName.name}</h3>
+        <div className="p-4 mt-4 bg-gray-100 rounded-lg shadow-md">
+          <h3 className="text-lg font-semibold text-blue-500">{selectedName.name}</h3>
           <p>
-            <strong>Division:</strong> {selectedName.division}
+            <span className="font-medium">NIP:</span> {selectedName.nip}
           </p>
           <p>
-            <strong>Email:</strong> {selectedName.email}
+            <span className="font-medium">Email:</span> {selectedName.email}
           </p>
-          <p>
-            <strong>Description:</strong> {selectedName.description}
-          </p>
+          <div className="mt-4">
+            <Link
+              to={`/detailprofil?email=${selectedName.email}`}
+              state={{ name: selectedName.name }}
+              className="text-sm text-blue-500 hover:underline"
+            >
+              View Details
+            </Link>
+          </div>
         </div>
       )}
-
-      {/* Tambahkan CSS Responsif */}
-      <style>
-        {`
-          @media (max-width: 768px) {
-            div {
-              padding: 10px;
-            }
-            .react-select__control {
-              width: 100% !important;
-            }
-            .react-select__menu {
-              font-size: 14px;
-            }
-          }
-          @media (max-width: 480px) {
-            h3 {
-              font-size: 18px;
-            }
-            p {
-              font-size: 14px;
-            }
-          }
-        `}
-      </style>
     </div>
   );
-};
-
-const styles = {
-  container: { margin: "20px auto", maxWidth: "600px", textAlign: "center" },
-  header: { color: "#6c757d", fontSize: "16px", fontStyle: "italic", marginBottom: "20px" },
-  buttonContainer: { display: "inline-flex", gap: "10px", marginTop: "20px" },
-  resetButton: {
-    padding: "10px 15px",
-    backgroundColor: "#f44336",
-    color: "#fff",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    transition: "all 0.3s ease",
-  },
-  searchButton: {
-    padding: "10px 15px",
-    color: "#fff",
-    border: "none",
-    borderRadius: "8px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    transition: "all 0.3s ease",
-  },
-  hoverResetShadow: "0 0 15px rgba(244, 67, 54, 0.7)",
-  hoverSearchShadow: "0 0 15px rgba(0, 123, 255, 0.7)",
-  normalShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  error: { marginTop: "10px", color: "red", fontStyle: "italic" },
-  details: {
-    marginTop: "20px",
-    padding: "20px",
-    borderRadius: "8px",
-    backgroundColor: "#f8f9fa",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    textAlign: "left",
-  },
-  detailsHeader: { color: "#007bff" },
-};
-
-const customSelectStyles = {
-  control: (base) => ({
-    ...base,
-    width: "100%",
-    padding: "10px",
-    borderRadius: "8px",
-    borderColor: "#007bff",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  }),
-  menu: (base) => ({
-    ...base,
-    borderRadius: "8px",
-    borderColor: "#ccc",
-  }),
-  option: (base, state) => ({
-    ...base,
-    backgroundColor: state.isSelected
-      ? "#007bff"
-      : state.isFocused
-      ? "#f0f0f0"
-      : "#fff",
-    color: state.isSelected ? "#fff" : "#000",
-  }),
 };
 
 export default Dropdown;

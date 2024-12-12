@@ -129,15 +129,4 @@ const mediaQueries = `
 }
 `;
 
-// Tambahkan media queries ke dalam style tag
-const addMediaQueries = () => {
-  const styleSheet = document.createElement("style");
-  styleSheet.type = "text/css";
-  styleSheet.innerText = mediaQueries;
-  document.head.appendChild(styleSheet);
-};
-
-// Tambahkan style pada komponen mount
-addMediaQueries();
-
 export default FindByNamePage;

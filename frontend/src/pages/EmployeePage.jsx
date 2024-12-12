@@ -1,110 +1,123 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AddEmployeeModal } from '../component/Employee/addEmployee';
+import { AddCandidateModal } from '../component/Employee/addCandidate';
 import { EditEmployeeModal } from '../component/Employee/editEmployeeModal';
+import { EditCandidateModal } from '../component/Employee/editCandidate';
 import Navbar from '../pageSection/navBarDashboard';
 import TabsEmployee from "../component/Employee/tabsEmployee";
 import Employee from '../pageSection/Employee/employee';
 import Candidate from '../pageSection/Employee/candidate';
 import Category from '../pageSection/Employee/category';
-import ImportCSVModal from '../component/Employee/importCSVModal'; // Ensure this import is correct
-import DeleteEmployee from '../component/Employee/deleteEmployee';
+import ImportCSVModal from '../component/Employee/importCSVModal';
+import DeleteModal from '../component/coreValue/deleteModal';
 
 export default function EmployeePage() {
   const [activeTab, setActiveTab] = useState('Employee');
+  // Watch for URL hash change
+      useEffect(() => {
+        const handleHashChange = () => {
+          const hash = window.location.hash;
+          if (hash === '#ExistingEmployee') {
+            setActiveTab('Employee');
+          } else if (hash === '#NewCandidate') {
+            setActiveTab('candidate');
+          } else if (hash === '#Category') {
+            setActiveTab('category');
+          }
+        };
+    
+        // Listen for hash changes
+        window.addEventListener('hashchange', handleHashChange);
+    
+        // Check on initial load
+        handleHashChange();
+    
+        // Cleanup listener when component unmounts
+        return () => {
+          window.removeEventListener('hashchange', handleHashChange);
+        };
+      }, []);
+      
   const [Employees, setEmployees] = useState([
-    // Sample employee data
-    { id: '1', 
-      name: 'Rai Julianti', 
-      email: 'rai.julianti@lintasarta.co.id', 
-      category: 'category 1', 
-      topTalent: 'EQUITABLE, FIXER, FORGIVING, COLLABORATOR, NOBLE, COMPETITIVE, INITIATOR, EXPLORER, ENERGIZER, DEVELOPER',
-      bottomTalent: 'PERFECTIONIST, ARTICULATIVE, COURAGEOUS, PERSONALIZER, ADVISOR',
-      candidate: 'Lorem ipsum dolor sit amet' },
-    { id: '2', 
-      name: 'Adam Bagus Habibie', 
-      email: 'adam.bagus@lintasarta.co.id', 
-      category: 'category 1', 
-      topTalent: 'EQUITABLE, FIXER, FORGIVING, COLLABORATOR, NOBLE, COMPETITIVE, INITIATOR, EXPLORER, ENERGIZER, DEVELOPER',
-      bottomTalent: 'PERFECTIONIST, ARTICULATIVE, COURAGEOUS, PERSONALIZER, ADVISOR',
-      candidate: 'Lorem ipsum dolor sit amet' },
-    { id: '3', 
-      name: 'Annisa Nuraini', 
-      email: 'annisa.nuraini@lintasarta.co.id', 
-      category: 'category 1', 
-      topTalent: 'EQUITABLE, FIXER, FORGIVING, COLLABORATOR, NOBLE, COMPETITIVE, INITIATOR, EXPLORER, ENERGIZER, DEVELOPER',
-      bottomTalent: 'PERFECTIONIST, ARTICULATIVE, COURAGEOUS, PERSONALIZER, ADVISOR',
-      candidate: 'Lorem ipsum dolor sit amet' },
-    { id: '4', 
-      name: 'Sahla Sholiha', 
-      email: 'sahla.sholiha@lintasarta.co.id', 
-      category: 'category 1', 
-      topTalent: 'EQUITABLE, FIXER, FORGIVING, COLLABORATOR, NOBLE, COMPETITIVE, INITIATOR, EXPLORER, ENERGIZER, DEVELOPER',
-      bottomTalent: 'PERFECTIONIST, ARTICULATIVE, COURAGEOUS, PERSONALIZER, ADVISOR',
-      candidate: 'Lorem ipsum dolor sit amet' },
-    { id: '5', 
-      name: 'Lultfi Fauzie', 
-      email: 'luthfi.fauzie@lintasarta.co.id', 
-      category: 'category 1', 
-      topTalent: 'EQUITABLE, FIXER, FORGIVING, COLLABORATOR, NOBLE, COMPETITIVE, INITIATOR, EXPLORER, ENERGIZER, DEVELOPER',
-      bottomTalent: 'PERFECTIONIST, ARTICULATIVE, COURAGEOUS, PERSONALIZER, ADVISOR',
-      candidate: 'Lorem ipsum dolor sit amet' },
+    { id: '1', name: 'Rai Julianti', email: 'rai.julianti@lintasarta.co.id', category: 'category 1', topTalent: 'EQUITABLE, FIXER', bottomTalent: 'PERFECTIONIST' },
+    { id: '2', name: 'Adam Bagus Habibie', email: 'adam.bagus@lintasarta.co.id', category: 'category 1', topTalent: 'COLLABORATOR, NOBLE', bottomTalent: 'ARTICULATIVE' },
+  ]);
+  const [Candidates, setCandidates] = useState([
+    { id: '1', name: 'Fathur', email: 'fathur@gmail.com', role: 'member', topTalent: 'EQUITABLE, FIXER', bottomTalent: 'PERFECTIONIST' },
   ]);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditEmployeeModalOpen, setIsEditEmployeeModalOpen] = useState(false);
+  const [selectedEntity, setSelectedEntity] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [actionMenuVisible, setActionMenuVisible] = useState(false);
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [entityType, setEntityType] = useState(null);
+  const [isEditEmployeeModalOpen, setIsEditEmployeeModalOpen] = useState(false);
+  const [isEditCandidateModalOpen, setIsEditCandidateModalOpen] = useState(false);
   const [isAddEmployeeModalOpen, setIsAddEmployeeModalOpen] = useState(false);
-  const [isImportCSVModalOpen, setIsImportCSVModalOpen] = useState(false); // State for the ImportCSVModal
+  const [isAddCandidateModalOpen, setIsAddCandidateModalOpen] = useState(false);
+  const [isImportCSVModalOpen, setIsImportCSVModalOpen] = useState(false);
+  const [actionMenuVisible, setActionMenuVisible] = useState(false);
 
+  // Toggle action menu visibility
   const toggleActionMenu = () => setActionMenuVisible(!actionMenuVisible);
 
-  // Open Add Employee Modal
-  const openAddEmployeeModal = () => {
-    setIsAddEmployeeModalOpen(true);
-    setActionMenuVisible(false); // Close action menu when modal opens
-  };
-
-  // Close Add Employee Modal
+  const openAddEmployeeModal = () => setIsAddEmployeeModalOpen(true);
   const closeAddEmployeeModal = () => setIsAddEmployeeModalOpen(false);
 
-  // Open ImportCSV Modal
-  const openImportCSVModal = () => {
-    setIsImportCSVModalOpen(true); // Open ImportCSVModal
-    setActionMenuVisible(false); // Close action menu when modal opens
-  };
+  const openAddCandidateModal = () => setIsAddCandidateModalOpen(true);
+  const closeAddCandidateModal = () => setIsAddCandidateModalOpen(false);
 
-  // Close ImportCSV Modal
-  const closeImportCSVModal = () => setIsImportCSVModalOpen(false);
-
-  // Open Edit Employee Modal
-  const openEditEmployeeModal = (Employee) => {
-    setSelectedEmployee(Employee);
+  const openEditEmployeeModal = (employee) => {
+    setSelectedEmployee(employee);
     setIsEditEmployeeModalOpen(true);
-    setActionMenuVisible(false); // Close action menu when modal opens
   };
-
-  // Close Edit Employee Modal
   const closeEditEmployeeModal = () => {
     setIsEditEmployeeModalOpen(false);
-    setSelectedEmployee(null); // Reset selected value when modal closes
+    setSelectedEmployee(null);
   };
 
-  const openDeleteModal = (Employee) => {
-    setSelectedEmployee(Employee);
+  const openEditCandidateModal = (candidate) => {
+    setSelectedCandidate(candidate);
+    setIsEditCandidateModalOpen(true);
+  };
+  const closeEditCandidateModal = () => {
+    setIsEditCandidateModalOpen(false);
+    setSelectedCandidate(null);
+  };
+
+  const openDeleteModal = (entity, type) => {
+    setSelectedEntity(entity);
+    setEntityType(type);
     setIsDeleteModalOpen(true);
   };
 
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
-    setSelectedEmployee(null);
+    setSelectedEntity(null);
+    setEntityType(null);
   };
 
-  const deleteEmployee = (Employee) => {
-    setEmployees((prevValues) =>
-      prevValues.filter((value) => value.name !== Employee.name)
-    );
+  const deleteEntity = () => {
+    if (entityType === 'Employee') {
+      setEmployees((prev) => prev.filter((item) => item.id !== selectedEntity.id));
+    } else if (entityType === 'Candidate') {
+      setCandidates((prev) => prev.filter((item) => item.id !== selectedEntity.id));
+    }
     closeDeleteModal();
+  };
+
+  const updateEmployee = (updatedEmployee) => {
+    setEmployees((prev) =>
+      prev.map((emp) => (emp.id === updatedEmployee.id ? updatedEmployee : emp))
+    );
+    closeEditEmployeeModal();
+  };
+
+  const updateCandidate = (updatedCandidate) => {
+    setCandidates((prev) =>
+      prev.map((cand) => (cand.id === updatedCandidate.id ? updatedCandidate : cand))
+    );
+    closeEditCandidateModal();
   };
 
   return (
@@ -113,7 +126,6 @@ export default function EmployeePage() {
       <div className="px-[12%] h-full py-32">
         <TabsEmployee activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        {/* Show Employee, Candidate, or Category based on the active tab */}
         {activeTab === 'Employee' ? (
           <Employee
             Employees={Employees}
@@ -121,41 +133,39 @@ export default function EmployeePage() {
             actionMenuVisible={actionMenuVisible}
             toggleActionMenu={toggleActionMenu}
             openAddEmployeeModal={openAddEmployeeModal}
-            openImportCSVModal={openImportCSVModal} // Pass function to open the ImportCSV modal
-            openDeleteModal={openDeleteModal}
+            openImportCSVModal={() => setIsImportCSVModalOpen(true)}
+            openDeleteModal={(entity) => openDeleteModal(entity, 'Employee')}
           />
         ) : activeTab === 'candidate' ? (
-          <Candidate />
+          <Candidate
+            Candidates={Candidates}
+            openEditCandidateModal={openEditCandidateModal}
+            actionMenuVisible={actionMenuVisible}
+            toggleActionMenu={toggleActionMenu}
+            openAddCandidateModal={openAddCandidateModal}
+            openDeleteModal={(entity) => openDeleteModal(entity, 'Candidate')}
+          />
         ) : (
           <Category />
         )}
 
         {/* Modals */}
-        <AddEmployeeModal
-          isOpen={isAddEmployeeModalOpen}
-          onClose={closeAddEmployeeModal}
-          // Additional props for Add Employee Modal
-        />
+        <AddEmployeeModal isOpen={isAddEmployeeModalOpen} onClose={closeAddEmployeeModal} />
+        <AddCandidateModal isOpen={isAddCandidateModalOpen} onClose={closeAddCandidateModal} />
         <EditEmployeeModal
           isOpen={isEditEmployeeModalOpen}
           onClose={closeEditEmployeeModal}
           Employee={selectedEmployee}
-          // Additional props for Edit Employee Modal
+          updateEmployee={updateEmployee}
         />
-      
-        <DeleteEmployee
-          isOpen={isDeleteModalOpen}
-          onClose={closeDeleteModal}
-          onDelete={deleteEmployee}
-          Employee={selectedEmployee}
+        <EditCandidateModal
+          isOpen={isEditCandidateModalOpen}
+          onClose={closeEditCandidateModal}
+          Candidate={selectedCandidate}
+          updateCandidate={updateCandidate}
         />
-
-        {/* Import CSV Modal */}
-        <ImportCSVModal
-          isOpen={isImportCSVModalOpen}
-          onClose={closeImportCSVModal} // Close handler for the ImportCSVModal
-          // Additional props for ImportCSVModal
-        />
+        <DeleteModal isOpen={isDeleteModalOpen} onClose={closeDeleteModal} onDelete={deleteEntity} />
+        <ImportCSVModal isOpen={isImportCSVModalOpen} onClose={() => setIsImportCSVModalOpen(false)} />
       </div>
     </div>
   );

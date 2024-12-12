@@ -10,7 +10,20 @@ export default function NavBarDashboard() {
   const employeeRef = useRef(null);
   const jobRoleRef = useRef(null);
   const coreValueRef = useRef(null);
+  const [activeLink, setActiveLink] = useState(window.location.pathname); 
 
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Ambil data pengguna dari localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      window.location.href = '/LoginPage';
+    }
+  }, []);
+  
   // Menangani klik di luar dropdown untuk menutup dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -18,24 +31,42 @@ export default function NavBarDashboard() {
         (employeeRef.current && !employeeRef.current.contains(event.target)) &&
         (jobRoleRef.current && !jobRoleRef.current.contains(event.target)) &&
         (coreValueRef.current && !coreValueRef.current.contains(event.target)) &&
-        !event.target.closest('.hamburger') // Menambahkan pengecekan untuk hamburger
+        !event.target.closest('.hamburger')
       ) {
-        setActiveDropdown(null); // Menutup dropdown jika klik di luar
-        setIsMenuOpen(false); // Menutup menu hamburger jika klik di luar
+        setActiveDropdown(null); 
+        setIsMenuOpen(false); 
       }
     };
-
+  
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-
+  
+  // Update active link ketika URL berubah
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setActiveLink(window.location.pathname);
+    };
+  
+    window.addEventListener('popstate', handleLocationChange);
+  
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+    };
+  }, []);
+  
+  // Fungsi untuk memeriksa apakah link saat ini aktif
+  const isActive = (path) => {
+    return activeLink === path ? 'text-blue-700' : 'text-gray-700'; 
+  };
+  
   // Toggle dropdown yang aktif
   const toggleDropdown = (dropdownName) => {
     setActiveDropdown((prevState) => (prevState === dropdownName ? null : dropdownName));
   };
-
+  
   // Toggle hamburger menu
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -48,7 +79,7 @@ export default function NavBarDashboard() {
         <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between w-full px-6 py-3 bg-white shadow-md">
           {/* Logo */}
           <div className="w-[120px]">
-            <a href="#home">
+            <a href="/dashboard">
               <img className="w-full h-full bg-cover" src={Logo} alt="Logo" />
             </a>
           </div>
@@ -96,7 +127,7 @@ export default function NavBarDashboard() {
             <AnimatePresence>
               {isMenuOpen && (
                 <motion.div
-                  className="absolute right-0 z-50 w-[300px] py-4 mt-3 bg-white rounded-lg shadow-md px-6 md:w-72"
+                  className="absolute right-0 z-50 px-6 py-4 mt-3 bg-white rounded-lg shadow-md w-[300px] md:w-72"
                   style={{ position: 'absolute', zIndex: 999 }}
                   onClick={(e) => e.stopPropagation()} // Stop propagation
                   initial={{ opacity: 0, x: 100 }}
@@ -107,8 +138,8 @@ export default function NavBarDashboard() {
                   <div className="flex flex-col gap-4">
                     {/* Home Link */}
                     <a
-                      href="#home"
-                      className="px-4 py-2 text-gray-700 rounded-md hover:bg-gray-100"
+                      href="/dashboard"
+                      className={`px-4 py-2 text-gray-700 rounded-md hover:bg-gray-100 ${isActive('/dashboard')}`}
                     >
                       Home
                     </a>
@@ -116,7 +147,7 @@ export default function NavBarDashboard() {
                     {/* Employee Dropdown */}
                     <div ref={employeeRef}>
                       <button
-                        className="flex items-center justify-between w-full px-4 py-2 text-gray-700 rounded-md hover:bg-gray-100"
+                        className={`flex items-center justify-between w-full px-4 py-2 text-gray-700 rounded-md hover:bg-gray-100} ${isActive('/employee')}`}
                         onClick={() => toggleDropdown('employee')}
                       >
                         Employee
@@ -145,18 +176,18 @@ export default function NavBarDashboard() {
                             transition={{ duration: 0.3 }}
                           >
                             <li>
-                              <a href="#employeeOption1" className="block px-4 py-2 text-gray-600">
-                                Employee Option 1
+                              <a href="/employee#ExistingEmployee" className="block px-4 py-2 text-gray-600">
+                                Existing Employee
                               </a>
                             </li>
                             <li>
-                              <a href="#employeeOption2" className="block px-4 py-2 text-gray-600">
-                                Employee Option 2
+                              <a href="/employee#NewCandidate" className="block px-4 py-2 text-gray-600">
+                                New Candidate
                               </a>
                             </li>
                             <li>
-                              <a href="#employeeOption3" className="block px-4 py-2 text-gray-600">
-                                Employee Option 3
+                              <a href="/employee#Category" className="block px-4 py-2 text-gray-600">
+                                Category
                               </a>
                             </li>
                           </motion.ul>
@@ -167,7 +198,7 @@ export default function NavBarDashboard() {
                     {/* Job Role Dropdown */}
                     <div ref={jobRoleRef}>
                       <button
-                        className="flex items-center justify-between w-full px-4 py-2 text-gray-700 rounded-md hover:bg-gray-100"
+                        className={`flex items-center justify-between w-full px-4 py-2 text-gray-700 rounded-md hover:bg-gray-100} ${isActive('/jobRole')}`}
                         onClick={() => toggleDropdown('jobRole')}
                       >
                         Job Role
@@ -196,13 +227,13 @@ export default function NavBarDashboard() {
                             transition={{ duration: 0.3 }}
                           >
                             <li>
-                              <a href="#jobRoleOption1" className="block px-4 py-2 text-gray-600">
-                                Job Role Option 1
+                              <a href="/jobRole#JobRole" className="block px-4 py-2 text-gray-600">
+                                Job Role 
                               </a>
                             </li>
                             <li>
-                              <a href="#jobRoleOption2" className="block px-4 py-2 text-gray-600">
-                                Job Role Option 2
+                              <a href="/jobRole#Competency" className="block px-4 py-2 text-gray-600">
+                                Competency
                               </a>
                             </li>
                           </motion.ul>
@@ -213,7 +244,7 @@ export default function NavBarDashboard() {
                     {/* Core Value Dropdown */}
                     <div ref={coreValueRef}>
                       <button
-                        className="flex items-center justify-between w-full px-4 py-2 text-gray-700 rounded-md hover:bg-gray-100"
+                        className={`flex items-center justify-between w-full px-4 py-2 text-gray-700 rounded-md hover:bg-gray-100} ${isActive('/coreValue')}`}
                         onClick={() => toggleDropdown('coreValue')}
                       >
                         Core Value
@@ -242,18 +273,41 @@ export default function NavBarDashboard() {
                             transition={{ duration: 0.3 }}
                           >
                             <li>
-                              <a href="#coreValueOption1" className="block px-4 py-2 text-gray-600">
-                                Core Value Option 1
+                              <a href="/coreValue#corevalue" className="block px-4 py-2 text-gray-600">
+                                Core Value
                               </a>
                             </li>
                             <li>
-                              <a href="#coreValueOption2" className="block px-4 py-2 text-gray-600">
-                                Core Value Option 2
+                              <a href="/coreValue#dimension" className="block px-4 py-2 text-gray-600">
+                                Dimensions
                               </a>
                             </li>
                           </motion.ul>
                         )}
                       </AnimatePresence>
+                    </div>
+
+                    {/* User Profile */}
+                    <div className="flex items-center gap-4">
+                      {user ? (
+                        <a href="/UserProfile" className="flex items-center gap-4">
+                          <div className="w-10 h-10">
+                            <img
+                              src={user.profileImage || "https://static.wikitide.net/hoyodexwiki/9/92/Elysia_%28B3-MU-0%29.png"}
+                              alt="Profile"
+                              className="object-cover w-full h-full rounded-full"
+                            />
+                          </div>
+                          <div className="flex flex-col items-start justify-start">
+                            <div>
+                              <h1 className="font-semibold">{user.username}</h1>
+                              <p className="text-sm text-gray-500">{user.email}</p>
+                            </div>
+                          </div>
+                        </a>
+                      ) : (
+                        <p>Loading...</p>
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -263,22 +317,22 @@ export default function NavBarDashboard() {
         </header>
       ) : (
         // Jika layar besar (Desktop)
-        <header className="fixed flex top-0 right-0 left-0 items-center z-50 mt-12 lg:mt-8 xl:mt-10 rounded-[20px] lg:rounded-[30px] px-4 justify-around bg-white mx-[4%] lg:mx-[6%] xl:mx-[8%] shadow-md h-[50px]">
+        <header className="fixed flex top-0 right-0 left-0 items-center z-50 mt-12 lg:mt-8 xl:mt-10 rounded-[20px] lg:rounded-[30px] px-4 justify-around bg-white mx-[4%] lg:mx-[6%] xl:mx-[8%] shadow-md h-[50px] md:text-sm lg:text-base">
         {/* Logo */}
         <div className="w-[120px]">
-          <a href="#home">
+          <a href="/dashboard">
             <img className="w-full h-full bg-cover" src={Logo} alt="Logo" />
           </a>
         </div>
   
         {/* Menu Navigation */}
-        <div className="flex gap-8">
-          <a href="#home" className="text-sm lg:text-base">Home</a>
+        <div className="flex gap-3 lg:gap-8">
+          <a href="/dashboard" className={`text-sm lg:text-base ${isActive('/dashboard')}`}>Home</a>
   
           {/* Dropdown for Employee */}
           <div ref={employeeRef} className="relative">
             <div
-              className="flex items-center cursor-pointer"
+              className={`flex items-center cursor-pointer ${isActive('/employee')}`}
               onClick={() => toggleDropdown('employee')}
             >
               Employee
@@ -306,9 +360,9 @@ export default function NavBarDashboard() {
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <li><a href="#employeeOption1" className="block px-4 py-2">Option 1</a></li>
-                  <li><a href="#employeeOption2" className="block px-4 py-2">Option 2</a></li>
-                  <li><a href="#employeeOption3" className="block px-4 py-2">Option 3</a></li>
+                  <li><a href="/employee#ExistingEmployee" className="block px-4 py-2">Existing Employee</a></li>
+                  <li><a href="/employee#NewCandidate" className="block px-4 py-2">New Candidate</a></li>
+                  <li><a href="/employee#Category" className="block px-4 py-2">Category</a></li>
                 </motion.ul>
               )}
             </AnimatePresence>
@@ -317,7 +371,7 @@ export default function NavBarDashboard() {
           {/* Dropdown for Job Role */}
           <div ref={jobRoleRef} className="relative">
             <div
-              className="flex items-center cursor-pointer"
+              className={`flex items-center cursor-pointer ${isActive('/jobRole')}`}
               onClick={() => toggleDropdown('jobRole')}
             >
               Job Role
@@ -345,8 +399,8 @@ export default function NavBarDashboard() {
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <li><a href="#jobRoleOption1" className="block px-4 py-2">Option 1</a></li>
-                  <li><a href="#jobRoleOption2" className="block px-4 py-2">Option 2</a></li>
+                  <li><a href="/jobRole#JobRole" className="block px-4 py-2">Job Role</a></li>
+                  <li><a href="/jobRole#Competency" className="block px-4 py-2">Competency</a></li>
                 </motion.ul>
               )}
             </AnimatePresence>
@@ -355,7 +409,7 @@ export default function NavBarDashboard() {
           {/* Dropdown for Core Value */}
           <div ref={coreValueRef} className="relative">
             <div
-              className="flex items-center cursor-pointer"
+              className={`flex items-center cursor-pointer ${isActive('/coreValue')}`}
               onClick={() => toggleDropdown('coreValue')}
             >
               Core Value
@@ -383,8 +437,8 @@ export default function NavBarDashboard() {
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <li><a href="#coreValueOption1" className="block px-4 py-2">Option 1</a></li>
-                  <li><a href="#coreValueOption2" className="block px-4 py-2">Option 2</a></li>
+                  <li><a href="/coreValue#corevalue" className="block px-4 py-2">Core Value</a></li>
+                  <li><a href="/coreValue#dimension" className="block px-4 py-2">Dimensions</a></li>
                 </motion.ul>
               )}
             </AnimatePresence>
@@ -393,17 +447,25 @@ export default function NavBarDashboard() {
   
         {/* User Profile */}
         <div className="flex items-center gap-4">
-          <div className="w-10">
-            <img
-              src="https://static.wikitide.net/hoyodexwiki/9/92/Elysia_%28B3-MU-0%29.png"
-              alt="Profile"
-              className="object-cover w-full h-auto rounded-full"
-            />
-          </div>
-          <div className="flex flex-col items-start justify-start">
-            <h1 className="font-semibold">Jimmy Maulana</h1>
-            <p className="text-sm text-gray-500">jimmymaulana07@gmail.com</p>
-          </div>
+          {user ? (
+            <a href="/UserProfile" className="flex items-center gap-4">
+              <div className="w-10 h-10">
+                <img
+                  src={user.profileImage || "https://static.wikitide.net/hoyodexwiki/9/92/Elysia_%28B3-MU-0%29.png"}
+                  alt="Profile"
+                  className="object-cover w-full h-full rounded-full"
+                />
+              </div>
+              <div className="flex flex-col items-start justify-start">
+                <div>
+                  <h1 className="font-semibold">{user.username}</h1>
+                  <p className="text-sm text-gray-500">{user.email}</p>
+                </div>
+              </div>
+            </a>
+          ) : (
+            <p>Loading...</p>
+          )}
         </div>
       </header>
       )}

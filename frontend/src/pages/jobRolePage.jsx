@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AddCompetencyModal } from '../component/competency/addCompetency';
 import DeleteCompetency from '../component/competency/deleteCompetency';
 import { EditCompetencyModal } from '../component/competency/editCompetency';
@@ -6,7 +6,6 @@ import LoadFromLibraryCompetencyModal from '../component/competency/loadFromLibr
 import { AddJobRoleModal } from '../component/jobRole/addJobRoleModal';
 import DeleteJobRole from '../component/jobRole/deleteJobRole';
 import { EditJobRoleModal } from '../component/jobRole/editJobRoleModal';
-import LoadFromLibraryModal from '../component/jobRole/loadFromLibraryModal';
 import TabsJobRole from "../component/jobRole/tabsJobRole";
 import Competency from '../pageSection/jobRole/competency';
 import JobRole from '../pageSection/jobRole/jobRolesSection';
@@ -14,6 +13,28 @@ import Navbar from '../pageSection/navBarDashboard';
 
 export default function JobRolesPage() {
   const [activeTab, setActiveTab] = useState('jobrole');
+  // Watch for URL hash change
+      useEffect(() => {
+        const handleHashChange = () => {
+          const hash = window.location.hash;
+          if (hash === '#JobRole') {
+            setActiveTab('jobrole');
+          } else if (hash === '#Competency') {
+            setActiveTab('responsibility');
+          }
+        };
+    
+        // Listen for hash changes
+        window.addEventListener('hashchange', handleHashChange);
+    
+        // Check on initial load
+        handleHashChange();
+    
+        // Cleanup listener when component unmounts
+        return () => {
+          window.removeEventListener('hashchange', handleHashChange);
+        };
+      }, []);
   const [jobRoles, setJobRoles] = useState([
     {
       id: 1,
@@ -208,11 +229,6 @@ export default function JobRolesPage() {
           onClose={() => setIsEditJobRoleModalOpen(false)}
           jobRole={selectedJobRole}
           updateJobRole={updateJobRole}
-        />
-        <LoadFromLibraryModal
-          isOpen={isLoadFromLibraryModalOpen}
-          onClose={() => setIsLoadFromLibraryModalOpen(false)}
-          loadJobRoles={loadJobRoles}
         />
         <DeleteJobRole
           isOpen={isDeleteModalOpen}
