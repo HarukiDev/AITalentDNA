@@ -17,16 +17,14 @@ export default function DeleteJobRole({ isOpen, onClose, onDelete, jobRole }) {
           </button>
   
           {/* Modal Content */}
-          <div className="flex flex-col items-center justify-center text-center">
-            {/* Trash Icon */}
-            <svg xmlns="http://www.w3.org/2000/svg" className="text-red-500 w-14 h-14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-2-2m0 0l-2-2m2 2H9m10 0l-1 12a2 2 0 01-2 2H6a2 2 0 01-2-2L3 7M7 7h10M10 11v6M14 11v6" />
-            </svg>
-  
-            <h3 className="mb-4 text-xl font-semibold text-gray-800">Delete Job Role</h3>
-            <p className="mb-6 text-gray-600">
-              Are you sure you want to delete the job role <strong>{jobRole.name}</strong>?
-            </p>
+          <div className="flex flex-col items-center justify-center text-start">
+            <div className="flex flex-col items-start">
+              <h3 className="mb-4 text-xl font-semibold text-gray-800">Delete Job Role</h3>
+              <p className="mb-6 text-gray-600">
+                Are you sure you want to delete the job role <strong>{jobRole.name}</strong>?
+              </p>
+            </div>
+            
   
             <div className="flex justify-center space-x-4">
               <button

@@ -15,7 +15,7 @@ export default function Employee({
 
   // Filter employees based on search query
   const filteredEmployees = Employees.filter((employee) =>
-    employee.name.toLowerCase().includes(searchQuery.toLowerCase())
+    (employee.name || "").toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Pagination logic
@@ -80,7 +80,6 @@ export default function Employee({
 
         {/* Search Bar and Options also status */}
         <div className="flex flex-wrap items-center gap-4 md:justify-end md lg:flex-wrap">
-
           <div className="relative w-full md:w-80">
             <input
               type="text"
@@ -118,7 +117,7 @@ export default function Employee({
                 >
                   {employeesWithCompleteTalents
                     ? "All talents are complete"
-                    : "Some talents are missing"}
+                    : "Some talent data is missing."}
                 </span>
               </p>
             </div>
@@ -207,51 +206,51 @@ export default function Employee({
                     <td className="p-3">{employee.topTalent}</td>
                     <td className="p-3">{employee.bottomTalent}</td>
                     <td className="flex justify-center p-3 space-x-4 text-center">
-                        <button
-                          className="text-blue-500 hover:text-blue-700 focus:outline-none"
-                          onClick={() => openEditEmployeeModal(employee)}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '24px',
-                            height: '24px',
-                          }}
+                      <button
+                        className="text-blue-500 hover:text-blue-700 focus:outline-none"
+                        onClick={() => openEditEmployeeModal(employee)}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "24px",
+                          height: "24px",
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-5 h-5"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-5 h-5"
-                          >
-                            <path d="M15.7279 9.57627L14.3137 8.16206L5 17.4758V18.89H6.41421L15.7279 9.57627ZM17.1421 8.16206L18.5563 6.74785L17.1421 5.33363L15.7279 6.74785L17.1421 8.16206ZM7.24264 20.89H3V16.6473L16.435 3.21231C16.8256 2.82179 17.4587 2.82179 17.8492 3.21231L20.6777 6.04074C21.0682 6.43126 21.0682 7.06443 20.6777 7.45495L7.24264 20.89Z"></path>
-                          </svg>
-                        </button>
-                        <button
-                          className="text-red-500 hover:text-red-700 focus:outline-none"
-                          onClick={() => openDeleteModal(employee)}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '24px',
-                            height: '24px',
-                          }}
+                          <path d="M15.7279 9.57627L14.3137 8.16206L5 17.4758V18.89H6.41421L15.7279 9.57627ZM17.1421 8.16206L18.5563 6.74785L17.1421 5.33363L15.7279 6.74785L17.1421 8.16206ZM7.24264 20.89H3V16.6473L16.435 3.21231C16.8256 2.82179 17.4587 2.82179 17.8492 3.21231L20.6777 6.04074C21.0682 6.43126 21.0682 7.06443 20.6777 7.45495L7.24264 20.89Z"></path>
+                        </svg>
+                      </button>
+                      <button
+                        className="text-red-500 hover:text-red-700 focus:outline-none"
+                        onClick={() => openDeleteModal(employee)}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "24px",
+                          height: "24px",
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-5 h-5"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-5 h-5"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </button>
-                      </td>
+                          <path
+                            fillRule="evenodd"
+                            d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    </td>
                   </tr>
                 ))
               ) : (

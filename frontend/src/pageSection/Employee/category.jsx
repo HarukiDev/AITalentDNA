@@ -362,7 +362,7 @@ const CategoryComponent = () => {
             </button>
             <h3 className="mb-4 text-xl font-semibold">Delete Category</h3>
             <p className="mb-6">Are you sure you want to delete the category <strong>{categoryToDelete?.name}</strong>?</p>
-            <div className="flex justify-between">
+            <div className="flex justify-center space-x-4">
               <button
                 onClick={closeDeleteModal}
                 className="px-4 py-2 text-white bg-gray-400 rounded-lg"

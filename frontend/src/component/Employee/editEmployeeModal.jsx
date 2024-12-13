@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from 'react';
 
-export function EditEmployeeModal({ isOpen, onClose, Employee, updateEmployee }) {
+const EditEmployeeModal = ({ isOpen, onClose, employee, updateEmployee }) => {
   const [employeeName, setEmployeeName] = useState('');
   const [email, setEmail] = useState('');
   const [nik, setNIK] = useState('');
   const [jabatan, setJabatan] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [categories, setCategories] = useState([
+  const [categories] = useState([
     { id: '1', name: 'Kategori 1' },
     { id: '2', name: 'Kategori 2' },
     { id: '3', name: 'Kategori 3' },
   ]);
 
+  // Gunakan useEffect untuk memastikan data employee ter-set pada saat modal dibuka
   useEffect(() => {
-    if (isOpen && Employee) {
-      // Set nilai default dari employee yang sedang diedit
-      setEmployeeName(Employee.name || '');
-      setEmail(Employee.email || '');
-      setNIK(Employee.nik || '');
-      setJabatan(Employee.jabatan || '');
-      setSelectedCategory(Employee.category || '');
+    if (isOpen && employee) {
+      console.log("Employee data received:", employee); // Debugging
+      setEmployeeName(employee.name || '');
+      setEmail(employee.email || '');
+      setNIK(employee.nik || '');
+      setJabatan(employee.jabatan || '');
+      setSelectedCategory(employee.category || ''); // Pastikan kategori ter-set sesuai data
     }
-  }, [isOpen, Employee]);
+  }, [isOpen, employee]);
 
-  if (!isOpen) return null; // Jangan render modal jika tidak terbuka
+  if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,21 +35,19 @@ export function EditEmployeeModal({ isOpen, onClose, Employee, updateEmployee })
       return;
     }
 
-    // Update data employee
+    // Siapkan data yang akan diperbarui
     const updatedEmployee = {
-      ...Employee,
+      ...employee, // Menggunakan data employee yang sudah ada
       name: employeeName,
       email,
       nik,
       jabatan,
-      category: selectedCategory,
+      category: selectedCategory, // Pastikan kategori yang dipilih benar
     };
 
-    // Panggil fungsi update dari parent component
+    // Kirim data yang sudah di-update ke parent
     updateEmployee(updatedEmployee);
-
-    // Tutup modal setelah submit
-    onClose();
+    onClose(); // Tutup modal setelah data di-update
   };
 
   return (
@@ -57,9 +56,10 @@ export function EditEmployeeModal({ isOpen, onClose, Employee, updateEmployee })
         <h2 className="pb-2 mb-4 text-xl font-semibold text-gray-800 border-b">Edit Employee</h2>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4 mb-4">
-            {/* Kolom Kiri */}
             <div>
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="fullName">Full Name</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="fullName">
+                Full Name
+              </label>
               <input
                 type="text"
                 id="fullName"
@@ -70,7 +70,9 @@ export function EditEmployeeModal({ isOpen, onClose, Employee, updateEmployee })
               />
             </div>
             <div>
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="email">Email</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="email">
+                Email
+              </label>
               <input
                 type="email"
                 id="email"
@@ -81,9 +83,10 @@ export function EditEmployeeModal({ isOpen, onClose, Employee, updateEmployee })
               />
             </div>
 
-            {/* Kolom Kanan */}
             <div>
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="nik">Nomer Induk Karyawan</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="nik">
+                NIK
+              </label>
               <input
                 type="text"
                 id="nik"
@@ -94,7 +97,9 @@ export function EditEmployeeModal({ isOpen, onClose, Employee, updateEmployee })
               />
             </div>
             <div>
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="jabatan">Jabatan</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="jabatan">
+                Jabatan
+              </label>
               <input
                 type="text"
                 id="jabatan"
@@ -105,9 +110,10 @@ export function EditEmployeeModal({ isOpen, onClose, Employee, updateEmployee })
               />
             </div>
 
-            {/* Dropdown Kategori */}
             <div className="col-span-2">
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="category">Kelompok / Kategori</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="category">
+                Category
+              </label>
               <select
                 id="category"
                 value={selectedCategory}
@@ -124,7 +130,6 @@ export function EditEmployeeModal({ isOpen, onClose, Employee, updateEmployee })
             </div>
           </div>
 
-          {/* Tombol Aksi */}
           <div className="flex justify-end mt-4 space-x-4">
             <button
               type="button"
@@ -144,4 +149,6 @@ export function EditEmployeeModal({ isOpen, onClose, Employee, updateEmployee })
       </div>
     </div>
   );
-}
+};
+
+export default EditEmployeeModal;

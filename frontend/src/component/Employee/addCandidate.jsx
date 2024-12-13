@@ -1,33 +1,35 @@
 import React, { useState } from 'react';
 
-export function AddCandidateModal({ isOpen, onClose, addCandidate }) {
+export default function AddCandidateModal({ isOpen, onClose, addCandidate }) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [position, setPosition] = useState('');
+  const [role, setRole] = useState('');
 
-  if (!isOpen) return null;
+  if (!isOpen) return null; // Don't render if the modal is not open
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!fullName || !email || !position) {
+
+    // Check if all fields are filled
+    if (!fullName || !email || !role) {
       alert('Please fill in all fields');
       return;
     }
 
-    // Membuat kandidat baru
+    // Create a new candidate object
     const newCandidate = {
       name: fullName,
       email,
-      position,
+      role,
     };
 
-    // Menambahkan kandidat baru ke data utama
+    // Call the addCandidate function passed as a prop to update the state in the parent component
     addCandidate(newCandidate);
 
-    // Reset form dan tutup modal
+    // Reset the form fields and close the modal
     setFullName('');
     setEmail('');
-    setPosition('');
+    setRole('');
     onClose();
   };
 
@@ -48,6 +50,7 @@ export function AddCandidateModal({ isOpen, onClose, addCandidate }) {
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Enter full name"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
             <div>
@@ -61,19 +64,21 @@ export function AddCandidateModal({ isOpen, onClose, addCandidate }) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter email"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
             <div>
               <label className="block mb-2 font-medium text-gray-700" htmlFor="position">
-                Position
+                Role
               </label>
               <input
                 type="text"
-                id="position"
-                value={position}
-                onChange={(e) => setPosition(e.target.value)}
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
                 placeholder="Enter position"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
           </div>

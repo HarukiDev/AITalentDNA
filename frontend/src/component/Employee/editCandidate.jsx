@@ -1,31 +1,36 @@
 import React, { useState, useEffect } from 'react';
 
-export function EditCandidateModal({ isOpen, onClose, candidate, updateCandidate }) {
+export default function EditCandidateModal({ isOpen, onClose, candidate, updateCandidate }) {
   const [candidateName, setCandidateName] = useState('');
   const [email, setEmail] = useState('');
   const [position, setPosition] = useState('');
 
+  // Reset form fields when the modal is opened or candidate is updated
   useEffect(() => {
     if (isOpen && candidate) {
-      // Set nilai default dari kandidat yang sedang diedit
       setCandidateName(candidate.name || '');
       setEmail(candidate.email || '');
       setPosition(candidate.position || '');
+    } else {
+      // Reset fields when modal is closed
+      setCandidateName('');
+      setEmail('');
+      setPosition('');
     }
   }, [isOpen, candidate]);
 
-  if (!isOpen) return null; // Jangan render modal jika tidak terbuka
+  if (!isOpen) return null; // Don't render the modal if it's not open
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validasi input
+    // Validate input
     if (!candidateName || !email || !position) {
       alert('Please fill in all fields');
       return;
     }
 
-    // Update data kandidat
+    // Create the updated candidate object
     const updatedCandidate = {
       ...candidate,
       name: candidateName,
@@ -33,10 +38,10 @@ export function EditCandidateModal({ isOpen, onClose, candidate, updateCandidate
       position,
     };
 
-    // Panggil fungsi update dari parent component
+    // Call the update function passed from the parent
     updateCandidate(updatedCandidate);
 
-    // Tutup modal setelah submit
+    // Close the modal after submitting
     onClose();
   };
 
@@ -87,7 +92,7 @@ export function EditCandidateModal({ isOpen, onClose, candidate, updateCandidate
             </div>
           </div>
 
-          {/* Tombol Aksi */}
+          {/* Action Buttons */}
           <div className="flex justify-end mt-4 space-x-4">
             <button
               type="button"
