@@ -81,30 +81,30 @@ export default function CompetencyPage({
   };
 
   return (
-    <div className="p-0 bg-transparent min-h-screen">
+    <div className="min-h-screen p-0 bg-transparent">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5">
+      <div className="flex flex-col items-start justify-between mb-5 sm:flex-row sm:items-center">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Competencies</h1>
-        <p className="text-gray-600 text-sm sm:text-base">
+        <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">Competencies</h1>
+        <p className="text-sm text-gray-600 sm:text-base">
           Define competencies based on the roles and skills you need
         </p>
       </div>
 
       {/* Search Bar and Option Button */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mt-4 sm:mt-0">
+      <div className="flex flex-col items-start gap-3 mt-4 sm:flex-row sm:items-center sm:gap-4 sm:mt-0">
         <div className="relative w-full sm:w-auto">
           <input
             type="text"
             placeholder="Search Competencies"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full sm:w-64 p-2 pl-10 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full p-2 pl-10 border rounded-lg shadow-sm sm:w-64 focus:outline-none focus:ring focus:ring-blue-300"
           />
-          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+          <span className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="w-5 h-5"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -118,7 +118,7 @@ export default function CompetencyPage({
         </div>
         <div className="relative w-full sm:w-auto" ref={actionMenuRef}>
           <button
-            className="flex justify-center items-center bg-blue-600 text-white py-2 px-4 w-full sm:w-auto rounded-lg"
+            className="flex items-center justify-center w-full px-4 py-2 text-white bg-blue-600 rounded-lg sm:w-auto"
             onClick={toggleActionMenu}
           >
             {actionMenuVisible ? (
@@ -158,21 +158,21 @@ export default function CompetencyPage({
           </button>
 
             {actionMenuVisible && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg">
+              <div className="absolute right-0 w-48 mt-2 bg-white border rounded-lg shadow-lg">
                 <button
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  className="block w-full px-4 py-2 text-left hover:bg-gray-100"
                   onClick={openAddCompetencyModal}
                 >
                   Add Competency
                 </button>
                 <button
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  className="block w-full px-4 py-2 text-left hover:bg-gray-100"
                   onClick={openLoadFromLibraryModal}
                 >
                   Load from Library
                 </button>
                 <button
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  className="block w-full px-4 py-2 text-left hover:bg-gray-100"
                   onClick={handleSaveAsCsv}
                 >
                   Save Competency
@@ -184,7 +184,7 @@ export default function CompetencyPage({
       </div>
 
       {/* Table */}
-<div className="bg-white border rounded-lg shadow-lg overflow-hidden">
+<div className="overflow-hidden bg-white border rounded-lg shadow-lg">
   <div style={{ overflowX: 'auto' }}> {/* Inline style for scrollable wrapper */}
     <table className="w-full text-left border-collapse">
       <thead style={{ backgroundColor: '#0C3F8B' }} className="text-white">
@@ -193,24 +193,24 @@ export default function CompetencyPage({
           <th className="p-3">Level</th>
           <th className="p-3">Description</th>
           <th className="p-3">Indicators</th>
-          <th className="p-3 w-20">Action</th> {/* Fixed width for better layout */}
+          <th className="w-20 p-3">Action</th> {/* Fixed width for better layout */}
         </tr>
       </thead>
       <tbody>
         {currentItems.length > 0 ? (
           currentItems.map((competency, index) => (
             <tr key={index} className="hover:bg-gray-100">
-              <td className="p-3 border-t">{competency.name}</td>
-              <td className="p-3 border-t">{competency.level}</td>
-              <td className="p-3 border-t text-gray-600">{competency.description}</td>
-              <td className="p-3 border-t text-gray-600">
-                <ul className="list-disc pl-5">
+              <td className="p-3 ">{competency.name}</td>
+              <td className="p-3 ">{competency.level}</td>
+              <td className="p-3 text-gray-600 border-t">{competency.description}</td>
+              <td className="p-3 text-gray-600">
+                <ul className="pl-5 list-disc">
                   {competency.indicators.map((indicator, idx) => (
                     <li key={idx}>{indicator}</li>
                   ))}
                 </ul>
               </td>
-              <td className="p-3 border-t flex items-center space-x-2">
+              <td className="flex items-center p-3 space-x-2">
                 {/* Action buttons */}
                 <button
                   className="text-blue-500 hover:text-blue-700 focus:outline-none"
@@ -261,7 +261,7 @@ export default function CompetencyPage({
           ))
         ) : (
           <tr>
-            <td colSpan="5" className="p-5 text-center italic text-gray-500" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+            <td colSpan="5" className="p-5 italic text-center text-gray-500" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
               *No match records were found.*
             </td>
           </tr>
@@ -271,7 +271,7 @@ export default function CompetencyPage({
   </div>
 
  {/* Pagination */}
-<div className="flex flex-col sm:flex-row justify-between items-center p-4 gap-4 sm:gap-0">
+<div className="flex flex-col items-center justify-between gap-4 p-4 sm:flex-row sm:gap-0">
   {/* Items Per Page Selector */}
   <div className="flex items-center">
     <label htmlFor="itemsPerPage" className="mr-2 text-sm sm:text-base">
@@ -281,7 +281,7 @@ export default function CompetencyPage({
       id="itemsPerPage"
       value={itemsPerPage}
       onChange={handleItemsPerPageChange}
-      className="p-2 border rounded text-sm sm:text-base"
+      className="p-2 text-sm border rounded sm:text-base"
     >
       <option value="3">3</option>
       <option value="5">5</option>
