@@ -1,5 +1,5 @@
 # AITalentDNA
-AITalent DNA is a Website
+AI Talent DNA is an AI-powered website designed to help HR teams manage and discover talent more efficiently. This platform features a responsive, user-friendly UI with flexible filtering options to streamline the recruitment process.
 
 ## Backend 
 **1. Create database aitalentdna in phpmyadmin** <br/>
